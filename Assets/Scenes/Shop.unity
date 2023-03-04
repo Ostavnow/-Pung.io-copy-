@@ -3008,6 +3008,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7e9fddc9363a24d93e02ca849ba02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  user:
+    userName: 
+    email: 
+    password: 
+    amountMoney: 0
+    purchasedSkins: 
+    purchasedAbities: 
+    numberSelectedSkin: 0
+    money: 0
 --- !u!4 &312593800
 Transform:
   m_ObjectHideFlags: 0
@@ -9612,8 +9621,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1008752339}
   m_HandleRect: {fileID: 545542960}
   m_Direction: 0
-  m_Value: -0.00000010537931
-  m_Size: 0.3102769
+  m_Value: -0.000000105379286
+  m_Size: 0.31027687
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18909,6 +18918,28 @@ MonoBehaviour:
     skinRightHandImage: {fileID: 0}
     skinLeftHandImage: {fileID: 0}
   c_Skins: {fileID: 1546949900}
+  healthStripe: {fileID: 0}
+  staminaStripe: {fileID: 0}
+  XPStripe: {fileID: 0}
+  textOfHealthStrip: {fileID: 0}
+  textOfStaminaStrip: {fileID: 0}
+  attackDamageText: {fileID: 0}
+  healthText: {fileID: 0}
+  staminaText: {fileID: 0}
+  criticalDamageText: {fileID: 0}
+  attackSpeedText: {fileID: 0}
+  multiplierAttackDamageImprovementText: {fileID: 0}
+  healthImprovementMultiplierText: {fileID: 0}
+  staminaImprovementMultiplierText: {fileID: 0}
+  criticalDamageImprovementMultiplierText: {fileID: 0}
+  attackSpeedImprovementMultiplierText: {fileID: 0}
+  numberImproventsText: {fileID: 0}
+  levelText: {fileID: 0}
+  comboText: {fileID: 0}
+  loginPanel: {fileID: 0}
+  registerPanel: {fileID: 0}
+  Background: {fileID: 0}
+  canvasTransform: {fileID: 0}
 --- !u!1 &1905494547
 GameObject:
   m_ObjectHideFlags: 0
@@ -19489,10 +19520,10 @@ RectTransform:
   m_Father: {fileID: 1069192624}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -14, y: 374.3}
-  m_SizeDelta: {x: 373.41, y: 62.24}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -14, y: -150.70001}
+  m_SizeDelta: {x: 373.41, y: 62.23999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1976584175
 MonoBehaviour:

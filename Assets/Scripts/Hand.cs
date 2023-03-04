@@ -61,6 +61,9 @@ public class Hand : MonoBehaviour
             }
             if(randomValue < 1)
             {
+                GameManager.instance.user.amountMoney++;
+                mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
+                GameManager.instance.SaveUserProgress();
                 Instantiate(coinPrefab,transform.position,coinPrefab.transform.rotation);
             }
             BlowHand?.Invoke();

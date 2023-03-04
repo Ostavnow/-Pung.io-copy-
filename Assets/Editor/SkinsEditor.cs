@@ -7,7 +7,6 @@ using UnityEditor.SceneManagement;
 [CustomEditor(typeof(Skins))]
 public class SkinsEditor : Editor
 {
-
     private bool isFoldout;
     private ReorderableList list;
     private GUIContent healthLabel;
@@ -16,13 +15,13 @@ public class SkinsEditor : Editor
     private Texture skinBodyTexture;
     private Texture skinHandTexture;
     private int currentCountSkins;
-    private Skins c_Skins;
+    private Skins skins;
     private void OnEnable()
     {
         healthLabel = new GUIContent();
         healthLabel.text = "Health";
-        c_Skins = ((Skins)target);
-        list = new ReorderableList(c_Skins.skins,typeof(Skins),true,true,true,true);
+        skins = ((Skins)target);
+        list = new ReorderableList(Skins.skins,typeof(Skins),true,true,true,true);
         list.drawElementCallback = DrawElementCallback;
         list.elementHeightCallback = (index) => 
         {
@@ -44,7 +43,7 @@ public class SkinsEditor : Editor
     }
     private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
     {
-        Skin element = c_Skins.skins[index];
+        Skin element = Skins.skins[index];
             if(isActive)
             {
             EditorGUI.LabelField(new Rect(rect.x,rect.y,rect.width,EditorGUIUtility.singleLineHeight),new GUIContent(("Skin " + (index + 1))));
@@ -146,10 +145,10 @@ public class SkinsEditor : Editor
     public override void OnInspectorGUI()
     {
         Skins.prefabSkinCell = (GameObject) EditorGUILayout.ObjectField("Skin cell",(Object) Skins.prefabSkinCell,typeof(GameObject),false);
-        if(currentCountSkins != c_Skins.skins.Count)
+        if(currentCountSkins != Skins.skins.Count)
         {
-            currentCountSkins = c_Skins.skins.Count;
-            SetObjectDitry(c_Skins.gameObject);
+            currentCountSkins = Skins.skins.Count;
+            SetObjectDitry(skins.gameObject);
         }
         list.DoLayoutList();
         

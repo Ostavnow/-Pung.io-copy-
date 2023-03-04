@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   hand: {fileID: 4004167681953722752, guid: 5d2d532bc237f2b4db890f90368d01ce, type: 3}
-  timeAfterWhichBeNextBlow: 0.5
+  timeAfterWhichBeNextBlow: 0.05
 --- !u!114 &6699132864791098797
 MonoBehaviour:
   m_ObjectHideFlags: 0
