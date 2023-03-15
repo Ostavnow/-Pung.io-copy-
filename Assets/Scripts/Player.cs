@@ -212,6 +212,7 @@ public class Player : MonoBehaviour
         skilsPanel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
         comboGameObject = GameObject.Find("Canvas").transform.GetChild(10).gameObject;
         comboAnimator = comboGameObject.GetComponent<Animator>();
+        mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
     }
     void Update()
     {

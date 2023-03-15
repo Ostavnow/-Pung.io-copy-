@@ -6,8 +6,17 @@ public class GameManager : MonoBehaviour
 {
     public User user;
     public static GameManager instance;
+    private static string path
+    {
+        get{return Application.persistentDataPath + "/saveFile.json";}
+    }
+    private static string accountsDatabasePath
+    {
+        get{return Application.persistentDataPath + "/accountsDatabase.json";}
+    }
     private void Awake()
     {
+        // user = null;
         if(instance != null)
         {
             Destroy(gameObject);
@@ -15,6 +24,7 @@ public class GameManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+        AuthorizationVerification();
     }
     public static void LoadMenuScene()
     {
@@ -34,8 +44,7 @@ public class GameManager : MonoBehaviour
     }
     public void SaveUserDatabase(User user)
     {
-        string path = Application.persistentDataPath + "/saveFile.json";
-        using(StreamReader reader = new StreamReader(path))
+        using(StreamReader reader = new StreamReader(accountsDatabasePath))
         {
             int i = 0;
             while(!reader.EndOfStream)
@@ -45,7 +54,7 @@ public class GameManager : MonoBehaviour
             }
             user.id = i;
         }
-        using(StreamWriter writer = new StreamWriter(path,true))
+        using(StreamWriter writer = new StreamWriter(accountsDatabasePath,true))
         {
             string data = JsonUtility.ToJson(user);
             writer.WriteLine(data);
@@ -54,9 +63,38 @@ public class GameManager : MonoBehaviour
     }
     public void SaveUserProgress()
     {
-        string path = Application.persistentDataPath + "/saveFile.json";
         string data = JsonUtility.ToJson(user);
-        RewrateLine(path,user.id,data);
+        if(user.userName != "")
+        {
+            RewrateLine(accountsDatabasePath,user.id,data);
+        }
+        else
+        {
+            File.WriteAllText(path,data);
+        }
+    }
+    public void SaveUser()
+    {
+
+    }
+    public static string AccountDataSearch(string email)
+    {
+        if(File.Exists(path))
+        {
+            using(StreamReader reader = new StreamReader(accountsDatabasePath))
+            {
+                while(!(reader.EndOfStream))
+                {
+                string line = reader.ReadLine();
+                string emailDataBase = line.Split('"',11)[9];
+                if(emailDataBase == email)
+                {
+                    return line;
+                }
+                }
+            }
+        }
+        return null;
     }
     private static void RewrateLine(string path,int lineIndex,string newValue)
     {
@@ -78,30 +116,9 @@ public class GameManager : MonoBehaviour
         File.Delete(path);
         File.Move(tempPath,path);
     }
-    public static string AccountDataSearch(string email)
-    {
-        string path = Application.persistentDataPath + "/saveFile.json";
-        if(File.Exists(path))
-        {
-            using(StreamReader reader = new StreamReader(path))
-            {
-                while(!(reader.EndOfStream))
-                {
-                string line = reader.ReadLine();
-                string emailDataBase = line.Split('"',11)[9];
-                if(emailDataBase == email)
-                {
-                    return line;
-                }
-                }
-            }
-        }
-        return null;
-    }
     public static bool CheckingExistingEmail(string verifiedEmail)
     {
-        string path = Application.persistentDataPath + "/saveFile.json";
-        using(StreamReader sr = new StreamReader(path))
+        using(StreamReader sr = new StreamReader(accountsDatabasePath))
         {
             while(!sr.EndOfStream)
             {
@@ -113,5 +130,35 @@ public class GameManager : MonoBehaviour
             }
         }
         return true;
+    }
+    public Skin DeserializeSkin(int id)
+    {
+        string path = Application.persistentDataPath + "/skins.json";
+        using(StreamReader sr = new StreamReader(path))
+        {
+            for(int i = 0; i <= id;i++)
+            {
+                if(i == id)
+                {
+                    return (Skin) JsonUtility.FromJson<Skin>(sr.ReadLine());
+                }
+                sr.ReadLine();
+            }
+        }
+        return null;
+    }
+    private void AuthorizationVerification()
+    {
+        User user;
+        string Localdata = File.ReadAllText(path);
+        string email = Localdata.Split('"',11)[9];
+        if(email != "")
+        {
+           user = JsonUtility.FromJson<User>(AccountDataSearch(email));
+        }
+        else
+        {
+           user = JsonUtility.FromJson<User>(Localdata);
+        }
     }
 }

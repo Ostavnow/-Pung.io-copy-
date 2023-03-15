@@ -10,14 +10,18 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.IO;
+[Serializable]
 public class MainUIHandler : MonoBehaviour
 {
+    [SerializeField]
     public List<SkinCharacteristicsUI> skinCharacteristicsUI = new List<SkinCharacteristicsUI>();
+    public static MainUIHandler mainUIHandler;
     #if UNITY_EDITOR
-    public static SerializedObject serializedObject;
+    [SerializeField]
+    public SerializedObject serializedObject;
     #endif
     [HideInInspector]
-    public Skins c_Skins;
+    public Skins skins;
     // Components in the Game window
     [HideInInspector] public Image healthStripe;
     [HideInInspector] public Image staminaStripe;
@@ -62,17 +66,14 @@ public class MainUIHandler : MonoBehaviour
     private GameObject logoutButton;
     private TMP_InputField nicknameInputField;
     private TMP_Text idText;
-    [HideInInspector] public Transform Background;
+    [SerializeField] private GameObject skinCell;
+    [HideInInspector] public Transform background;
     [HideInInspector] public Transform canvasTransform;
     #if UNITY_EDITOR
-    public void OnValidate()
+    private void OnValidate()
     {
-        if(SceneManager.GetActiveScene().name == "Shop")
-        {
-            serializedObject = new SerializedObject(this);
-            c_Skins = FindObjectOfType<Skins>();
-            Debug.Log(serializedObject);
-        }
+        serializedObject = new SerializedObject(this);
+        mainUIHandler = this;
     }
     #endif
     private void Awake()
@@ -106,7 +107,7 @@ public class MainUIHandler : MonoBehaviour
         else if(SceneManager.GetActiveScene().name == "Menu")
         {
             canvasTransform = GameObject.Find("Canvas").transform;
-            Background = canvasTransform.GetChild(7);
+            background = canvasTransform.GetChild(7);
             loginPanel = canvasTransform.GetChild(8);
             emailLoginInputField = loginPanel.GetChild(0).GetComponent<TMP_InputField>();
             incorrectEmailLogin = loginPanel.GetChild(1).gameObject;
@@ -127,79 +128,75 @@ public class MainUIHandler : MonoBehaviour
             moneyCounterTextMenu = canvasTransform.GetChild(4).GetChild(1).GetChild(1).GetComponent<TMP_Text>();
             nicknameInputField = canvasTransform.GetChild(3).GetChild(6).GetChild(0).GetComponent<TMP_InputField>();
             idText = canvasTransform.GetChild(3).GetChild(6).GetChild(1).GetComponent<TMP_Text>();
+            skins = FindObjectOfType<Skins>();
         }
     }
     private void Start()
     {
         if(SceneManager.GetActiveScene().name == "Menu")
         {
-            MenuUpdate();           
-        }
-        else if(SceneManager.GetActiveScene().name == "Game")
-        {
-            // moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
+            MenuUpdate();  
         }
     }
     #if UNITY_EDITOR
-    public void UIAddSkinsToList(IList skins,GameObject prefabSkinCell)
+    public void UIAddSkinsToList(ReorderableList skins,GameObject prefabSkinCell)
     {
+        Debug.Log(skins.serializedProperty);
+        int index = skins.serializedProperty.arraySize;
+        skins.serializedProperty.arraySize++;
+        index = skins.serializedProperty.arraySize;
+        skins.index = index;
         Transform listSkins = GameObject.Find("Canvas").transform.GetChild(6).GetChild(0).GetChild(1).GetChild(0).transform;
-        if(GameObject.Find("Canvas/skins panel/Background/Scroll Area/Skins/Skin " + skins.Count) == null)
+        if(GameObject.Find("Canvas/skins panel/Background/Scroll Area/Skins/Skin " + index) == null)
         {
-            Skins.skins.Add(new Skin());
+            Debug.Log(index);
             GameObject currentSkinCell = Instantiate(prefabSkinCell,Vector3.zero,Quaternion.identity,listSkins);
-            currentSkinCell.name = "Skin " + (skins.Count);
-            Debug.Log(skins.Count);
+            Button buyButton = currentSkinCell.transform.GetChild(2).GetComponent<Button>();
+            buyButton.onClick.AddListener(delegate{BuySkin(index);});
+            currentSkinCell.name = "Skin " + (index);
         }       
-                Skin skin = (Skin) skins[skins.Count - 1];
-                skin.skinIndex = skins.Count - 1;
                 SkinCharacteristicsUI skinCharacteristicUI = new SkinCharacteristicsUI(
-                    listSkins.GetChild(skins.Count - 1).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(0).GetChild(3).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(0).GetChild(4).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(0).GetChild(5).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(1).GetComponent<Image>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(1).GetChild(1).GetComponent<Image>(),
-                    listSkins.GetChild(skins.Count - 1).GetChild(1).GetChild(0).GetComponent<Image>());
+                    listSkins.GetChild(index - 1).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(0).GetChild(3).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(0).GetChild(4).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(0).GetChild(5).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
+                    listSkins.GetChild(index - 1).GetChild(1).GetComponent<Image>(),
+                    listSkins.GetChild(index - 1).GetChild(1).GetChild(1).GetComponent<Image>(),
+                    listSkins.GetChild(index - 1).GetChild(1).GetChild(0).GetComponent<Image>());
                 skinCharacteristicsUI.Add(skinCharacteristicUI);
-                serializedObject = new SerializedObject(this);
-                Debug.Log("Создалась ячейка скина");
     }
     public void UIRemoveSkinToList(ReorderableList skins)
     {
         Transform listSkins = GameObject.Find("Canvas").transform.GetChild(6).GetChild(0).GetChild(1).GetChild(0).transform;
-        Debug.Log(skins.list.Count);
-        if(GameObject.Find("Canvas/skins panel/Background/scrollbar/Scroll Area/Skins/Skin " + skins.list.Count) != null)
+        if(GameObject.Find("Canvas/skins panel/Background/Scroll Area/Skins/Skin " + skins.serializedProperty.arraySize) != null)
         {
-            Destroy(listSkins.GetChild(skins.list.Count));
+            DestroyImmediate(listSkins.GetChild(skins.serializedProperty.arraySize - 1).gameObject);
         }
-        Skins.skins.Remove(Skins.skins[Skins.skins.Count - 1]);
-        // if(skinCharacteristicsUI.Count)
-        Debug.Log(skinCharacteristicsUI.Count);
+        skins.serializedProperty.arraySize--;
         skinCharacteristicsUI.Remove(skinCharacteristicsUI[skinCharacteristicsUI.Count - 1]);
     }
     #endif
     public void RegisterButton()
     {
-        Background.gameObject.SetActive(true);
+        background.gameObject.SetActive(true);
         registerPanel.gameObject.SetActive(true);
     }
     public void LoginButton()
     {
-        Background.gameObject.SetActive(true);
+        background.gameObject.SetActive(true);
         loginPanel.gameObject.SetActive(true);
     }
     public void BackLoginButton()
     {
-        Background.gameObject.SetActive(false);
+        background.gameObject.SetActive(false);
         loginPanel.gameObject.SetActive(false);
     }
     public void BackRegisterButton()
     {
-        Background.gameObject.SetActive(false);
+        background.gameObject.SetActive(false);
         registerPanel.gameObject.SetActive(false);
     }
     public void RegisterUser()
@@ -294,17 +291,19 @@ public class MainUIHandler : MonoBehaviour
     }
     public void LogoutButton()
     {
-        GameManager.instance.user = null;
+        GameManager.instance.user = new User();
+
         MenuUpdate();
     }
     public void MenuUpdate()
     {
-        if(GameManager.instance?.user != null)
+        if(GameManager.instance?.user.userName != "")
         {
             loginButton.SetActive(false);
             registerButton.SetActive(false);
             logoutButton.SetActive(true);
             idText.text = "ID:" + GameManager.instance.user.id.ToString();
+            moneyCounterTextMenu.text = GameManager.instance.user.amountMoney.ToString();
         }
         else
         {
@@ -312,6 +311,7 @@ public class MainUIHandler : MonoBehaviour
             registerButton.SetActive(true);
             logoutButton.SetActive(false);
             idText.text = "ID:0";
+            moneyCounterTextMenu.text = "0";
         }
     }
     public void ScrolldarSound()
@@ -330,30 +330,48 @@ public class MainUIHandler : MonoBehaviour
     {
         settingPanel.SetActive(false);
     }
+    public void BuySkin(int id)
+    {
+        if(GameManager.instance.user.amountMoney >= skins.skins[id].price)
+        {
+            GameManager.instance.user.amountMoney -= skins.skins[id].price;
+            GameManager.instance.user.purchasedSkins.Add(id);
+        }
+    }
+    private void ShovingCurrentSkins()
+    {
+        Transform characters = GameObject.Find("Canvas").transform.GetChild(5).GetChild(0).GetChild(1).GetChild(0);
+        User user = GameManager.instance.user;
+        for(int i = 0;i<user.purchasedSkins.Count;i++)
+        {
+            GameObject skinCellCurrent = Instantiate(skinCell,transform.position,Quaternion.identity,characters);
+            
+        }
+    }
 }
 [Serializable]
 public struct SkinCharacteristicsUI
 {
         [SerializeField]
-        private TMP_Text attackDamageText;
+        public TMP_Text attackDamageText;
         [SerializeField]
-        private TMP_Text healthText;
+        public TMP_Text healthText;
         [SerializeField]
-        private TMP_Text staminaText;
+        public TMP_Text staminaText;
         [SerializeField]
-        private TMP_Text criticalDamageText;
+        public TMP_Text criticalDamageText;
         [SerializeField]
-        private TMP_Text attackSpeedText;
+        public TMP_Text attackSpeedText;
         [SerializeField]
-        private TMP_Text protectionText;
+        public TMP_Text protectionText;
         [SerializeField]
-        private TMP_Text priceText;
+        public TMP_Text priceText;
         [SerializeField]
-        private Image skinBodyImage;
+        public Image skinBodyImage;
         [SerializeField]
-        private Image skinRightHandImage;
+        public Image skinRightHandImage;
         [SerializeField]
-        private Image skinLeftHandImage;
+        public Image skinLeftHandImage;
         public SkinCharacteristicsUI(TMP_Text attackDamageText,TMP_Text healthText,
                               TMP_Text staminaText,TMP_Text criticalDamageText,
                               TMP_Text attackSpeedText,TMP_Text protectionText,
