@@ -10,16 +10,14 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.IO;
+using UnityEngine.Events;
+using UnityEditor.Events;
+
 [Serializable]
 public class MainUIHandler : MonoBehaviour
 {
     [SerializeField]
     public List<SkinCharacteristicsUI> skinCharacteristicsUI = new List<SkinCharacteristicsUI>();
-    public static MainUIHandler mainUIHandler;
-    #if UNITY_EDITOR
-    [SerializeField]
-    public SerializedObject serializedObject;
-    #endif
     [HideInInspector]
     public Skins skins;
     // Components in the Game window
@@ -69,18 +67,23 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject skinCell;
     [HideInInspector] public Transform background;
     [HideInInspector] public Transform canvasTransform;
+    private Transform listSkins;
+    private GameObject refundPanel;
+    private int idSelectedSkin;
     #if UNITY_EDITOR
     private void OnValidate()
     {
-        serializedObject = new SerializedObject(this);
-        mainUIHandler = this;
+        if(SceneManager.GetActiveScene().name == "Shop")
+        {
+            listSkins = GameObject.Find("Canvas").transform.GetChild(6).GetChild(0).GetChild(1).GetChild(0).transform;
+        }
     }
     #endif
     private void Awake()
     {
+        canvasTransform = GameObject.Find("Canvas").transform;
         if(SceneManager.GetActiveScene().name == "Game")
         {
-            canvasTransform = GameObject.Find("Canvas").transform;
             healthStripe = canvasTransform.GetChild(4).GetChild(1).GetChild(1).GetComponent<Image>();
             staminaStripe = canvasTransform.GetChild(4).GetChild(2).GetChild(1).GetComponent<Image>();
             textOfHealthStrip = canvasTransform.GetChild(4).GetChild(1).GetChild(2).GetComponent<TMP_Text>();
@@ -106,7 +109,6 @@ public class MainUIHandler : MonoBehaviour
         }
         else if(SceneManager.GetActiveScene().name == "Menu")
         {
-            canvasTransform = GameObject.Find("Canvas").transform;
             background = canvasTransform.GetChild(7);
             loginPanel = canvasTransform.GetChild(8);
             emailLoginInputField = loginPanel.GetChild(0).GetComponent<TMP_InputField>();
@@ -128,7 +130,12 @@ public class MainUIHandler : MonoBehaviour
             moneyCounterTextMenu = canvasTransform.GetChild(4).GetChild(1).GetChild(1).GetComponent<TMP_Text>();
             nicknameInputField = canvasTransform.GetChild(3).GetChild(6).GetChild(0).GetComponent<TMP_InputField>();
             idText = canvasTransform.GetChild(3).GetChild(6).GetChild(1).GetComponent<TMP_Text>();
+        }
+        else if(SceneManager.GetActiveScene().name == "Shop")
+        {
             skins = FindObjectOfType<Skins>();
+            refundPanel = canvasTransform.GetChild(8).gameObject;
+            listSkins = GameObject.Find("Canvas").transform.GetChild(6).GetChild(0).GetChild(1).GetChild(0).transform;
         }
     }
     private void Start()
@@ -136,6 +143,10 @@ public class MainUIHandler : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "Menu")
         {
             MenuUpdate();  
+        }
+        else if(SceneManager.GetActiveScene().name == "Shop")
+        {
+            ShopUpdate();
         }
     }
     #if UNITY_EDITOR
@@ -149,10 +160,10 @@ public class MainUIHandler : MonoBehaviour
         Transform listSkins = GameObject.Find("Canvas").transform.GetChild(6).GetChild(0).GetChild(1).GetChild(0).transform;
         if(GameObject.Find("Canvas/skins panel/Background/Scroll Area/Skins/Skin " + index) == null)
         {
-            Debug.Log(index);
             GameObject currentSkinCell = Instantiate(prefabSkinCell,Vector3.zero,Quaternion.identity,listSkins);
             Button buyButton = currentSkinCell.transform.GetChild(2).GetComponent<Button>();
-            buyButton.onClick.AddListener(delegate{BuySkin(index);});
+            UnityAction<int> actionBuyButton = new UnityAction<int>(BuySkin);
+            UnityEventTools.AddIntPersistentListener(buyButton.onClick,actionBuyButton,(index - 1));
             currentSkinCell.name = "Skin " + (index);
         }       
                 SkinCharacteristicsUI skinCharacteristicUI = new SkinCharacteristicsUI(
@@ -243,6 +254,7 @@ public class MainUIHandler : MonoBehaviour
             user.email = emailRegisterInputField.text;
             user.password = passwordRegisterInputField.text;
             user.userName = nicknameInputField.text;
+
             GameManager.instance.SaveUserDatabase(user);
             BackRegisterButton();
             MenuUpdate();
@@ -297,13 +309,14 @@ public class MainUIHandler : MonoBehaviour
     }
     public void MenuUpdate()
     {
+        moneyCounterTextMenu.text = GameManager.instance.user.amountMoney.ToString();
+        ShovingCurrentSkins();
         if(GameManager.instance?.user.userName != "")
         {
             loginButton.SetActive(false);
             registerButton.SetActive(false);
             logoutButton.SetActive(true);
             idText.text = "ID:" + GameManager.instance.user.id.ToString();
-            moneyCounterTextMenu.text = GameManager.instance.user.amountMoney.ToString();
         }
         else
         {
@@ -311,7 +324,21 @@ public class MainUIHandler : MonoBehaviour
             registerButton.SetActive(true);
             logoutButton.SetActive(false);
             idText.text = "ID:0";
-            moneyCounterTextMenu.text = "0";
+        }
+    }
+    public void ShopUpdate()
+    {
+        canvasTransform.GetChild(4).GetChild(0).GetComponent<TMP_Text>().text = GameManager.instance.user.amountMoney.ToString();
+        User user = GameManager.instance.user;
+        for(int i = 0;i < user.purchasedSkins.Count;i++)
+        {
+            Button refundButton = listSkins.GetChild(user.purchasedSkins[i]).GetChild(4).GetComponent<Button>();
+            UnityAction<int> actionRefundButton = new UnityAction<int>(SelectedSkin);
+            UnityEventTools.AddIntPersistentListener(refundButton.onClick,actionRefundButton,(user.purchasedSkins[i]));
+            listSkins.GetChild(user.purchasedSkins[i]).GetChild(2).gameObject.SetActive(false);
+            listSkins.GetChild(user.purchasedSkins[i]).GetChild(3).gameObject.SetActive(true);
+            listSkins.GetChild(user.purchasedSkins[i]).GetChild(4).gameObject.SetActive(true);
+            listSkins.GetChild(user.purchasedSkins[i]).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text = (skins.skins[user.purchasedSkins[i]].price / 2).ToString();
         }
     }
     public void ScrolldarSound()
@@ -332,12 +359,45 @@ public class MainUIHandler : MonoBehaviour
     }
     public void BuySkin(int id)
     {
+        Debug.Log(id);
+        Debug.Log(skins.skins[id].price);
+        User user = GameManager.instance.user;
         if(GameManager.instance.user.amountMoney >= skins.skins[id].price)
         {
-            GameManager.instance.user.amountMoney -= skins.skins[id].price;
-            GameManager.instance.user.purchasedSkins.Add(id);
+            user.amountMoney -= skins.skins[id].price;
+            canvasTransform.GetChild(4).GetChild(0).GetComponent<TMP_Text>().text = GameManager.instance.user.amountMoney.ToString();
+            user.purchasedSkins.Add(id);
+            GameManager.instance.SaveUserProgress();
+            Button refundButton = listSkins.GetChild(user.purchasedSkins[id]).GetChild(4).GetComponent<Button>();
+            UnityAction<int> actionRefundButton = new UnityAction<int>(SelectedSkin);
+            UnityEventTools.AddIntPersistentListener(refundButton.onClick,actionRefundButton,(user.purchasedSkins[id]));
+            listSkins.GetChild(user.purchasedSkins[id]).GetChild(2).gameObject.SetActive(false);
+            listSkins.GetChild(user.purchasedSkins[id]).GetChild(3).gameObject.SetActive(true);
+            listSkins.GetChild(user.purchasedSkins[id]).GetChild(4).gameObject.SetActive(true);
+            listSkins.GetChild(user.purchasedSkins[id]).GetChild(4).GetChild(0).GetComponent<TMP_Text>().text = (skins.skins[user.purchasedSkins[id]].price / 2).ToString();
         }
     }
+    public void SelectedSkin(int id)
+    {
+        idSelectedSkin = id;
+        refundPanel.SetActive(true);
+    }
+    public void RefundSkin()
+    {
+        GameManager.instance.user.amountMoney += skins.skins[idSelectedSkin].price / 2;
+        canvasTransform.GetChild(4).GetChild(0).GetComponent<TMP_Text>().text = GameManager.instance.user.amountMoney.ToString();
+        GameManager.instance.user.purchasedSkins.Remove(idSelectedSkin);
+        GameManager.instance.SaveUserProgress();
+        listSkins.GetChild(idSelectedSkin).GetChild(2).gameObject.SetActive(true);
+        listSkins.GetChild(idSelectedSkin).GetChild(3).gameObject.SetActive(false);
+        listSkins.GetChild(idSelectedSkin).GetChild(4).gameObject.SetActive(false);
+        refundPanel.SetActive(false);
+    }
+    public void CancelRefund()
+    {
+        refundPanel.SetActive(false);
+    }
+
     private void ShovingCurrentSkins()
     {
         Transform characters = GameObject.Find("Canvas").transform.GetChild(5).GetChild(0).GetChild(1).GetChild(0);
@@ -345,7 +405,26 @@ public class MainUIHandler : MonoBehaviour
         for(int i = 0;i<user.purchasedSkins.Count;i++)
         {
             GameObject skinCellCurrent = Instantiate(skinCell,transform.position,Quaternion.identity,characters);
-            
+            Skin skin = GameManager.DeserializeSkin(user.purchasedSkins[i]);
+            Debug.Log(skin.price);
+            TMP_Text attackDamage = skinCellCurrent.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TMP_Text>();
+            TMP_Text health = skinCellCurrent.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<TMP_Text>();
+            TMP_Text stamina = skinCellCurrent.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<TMP_Text>();
+            TMP_Text criticalDamage = skinCellCurrent.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<TMP_Text>();
+            TMP_Text attackSpeed = skinCellCurrent.transform.GetChild(0).GetChild(4).GetChild(1).GetComponent<TMP_Text>();
+            TMP_Text protection = skinCellCurrent.transform.GetChild(0).GetChild(5).GetChild(1).GetComponent<TMP_Text>();
+            Image skinBody = skinCellCurrent.transform.GetChild(1).GetChild(0).GetComponent<Image>();
+            Image skinRightHand = skinCellCurrent.transform.GetChild(1).GetChild(1).GetComponent<Image>();
+            Image skinLeftHand = skinCellCurrent.transform.GetChild(1).GetChild(2).GetComponent<Image>();
+            attackDamage.text = skin.attackDamage.ToString();
+            health.text = skin.health.ToString();
+            stamina.text = skin.stamina.ToString();
+            criticalDamage.text = skin.criticalDamage.ToString();
+            attackSpeed.text = skin.attackSpeed.ToString();
+            protection.text = skin.protection.ToString();
+            skinBody.sprite = skin.spriteSkinBody;
+            skinRightHand.sprite = skin.spriteSkinHand;
+            skinLeftHand.sprite = skin.spriteSkinHand;
         }
     }
 }

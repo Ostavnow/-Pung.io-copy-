@@ -20,11 +20,17 @@ public class GameManager : MonoBehaviour
         if(instance != null)
         {
             Destroy(gameObject);
-            return;
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-        AuthorizationVerification();
+        else
+        {
+            Debug.Log("gthtvtyyfz bybwbkbpbhjdfyyf");
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        if(SceneManager.GetActiveScene().name == "Menu")
+        {
+            AuthorizationVerification();
+        }
     }
     public static void LoadMenuScene()
     {
@@ -72,10 +78,6 @@ public class GameManager : MonoBehaviour
         {
             File.WriteAllText(path,data);
         }
-    }
-    public void SaveUser()
-    {
-
     }
     public static string AccountDataSearch(string email)
     {
@@ -131,7 +133,7 @@ public class GameManager : MonoBehaviour
         }
         return true;
     }
-    public Skin DeserializeSkin(int id)
+    public static Skin DeserializeSkin(int id)
     {
         string path = Application.persistentDataPath + "/skins.json";
         using(StreamReader sr = new StreamReader(path))
@@ -149,7 +151,6 @@ public class GameManager : MonoBehaviour
     }
     private void AuthorizationVerification()
     {
-        User user;
         string Localdata = File.ReadAllText(path);
         string email = Localdata.Split('"',11)[9];
         if(email != "")
@@ -159,6 +160,7 @@ public class GameManager : MonoBehaviour
         else
         {
            user = JsonUtility.FromJson<User>(Localdata);
+           Debug.Log(user.amountMoney);
         }
     }
 }

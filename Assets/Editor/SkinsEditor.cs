@@ -173,24 +173,26 @@ public class SkinsEditor : Editor
     private void SerializeClassSkins(List<Skin> skins)
     {
         string path = Application.persistentDataPath + "/skins.json";
-        using(StreamWriter sr = new StreamWriter(path))
+        File.WriteAllText(path,"");
+        using(StreamWriter sw = new StreamWriter(path))
         {
             for(int i = 0;i < skins.Count;i++)
             {
                 string skin = JsonUtility.ToJson(skins[i]);
-                sr.WriteLine(skin);
+                sw.WriteLine(skin);
             }
         }
+        Debug.Log("Sterilization was successful");
     }
     private void UpdateSkinCharacteristicsUI(SerializedProperty element,SkinCharacteristicsUI sh)
     {
         Debug.Log(sh.attackDamageText.text);
-        sh.attackDamageText.text = element.FindPropertyRelative("attackDamage").floatValue.ToString();
-        sh.healthText.text = element.FindPropertyRelative("health").floatValue.ToString();
-        sh.staminaText.text = element.FindPropertyRelative("stamina").floatValue.ToString();
-        sh.criticalDamageText.text = element.FindPropertyRelative("criticalDamage").floatValue.ToString();
-        sh.attackSpeedText.text = element.FindPropertyRelative("attackSpeed").floatValue.ToString();
-        sh.protectionText.text = element.FindPropertyRelative("protection").floatValue.ToString();
+        sh.attackDamageText.text = ReplacingTickADot(element.FindPropertyRelative("attackDamage").floatValue);
+        sh.healthText.text = ReplacingTickADot(element.FindPropertyRelative("health").floatValue);
+        sh.staminaText.text = ReplacingTickADot(element.FindPropertyRelative("stamina").floatValue);
+        sh.criticalDamageText.text = ReplacingTickADot(element.FindPropertyRelative("criticalDamage").floatValue);
+        sh.attackSpeedText.text = ReplacingTickADot(element.FindPropertyRelative("attackSpeed").floatValue);
+        sh.protectionText.text = ReplacingTickADot(element.FindPropertyRelative("protection").floatValue);
         if(element?.FindPropertyRelative("spriteSkinBody").objectReferenceValue != null)
             {
                 sh.skinBodyImage.sprite = ((Sprite)element?.FindPropertyRelative("spriteSkinBody").objectReferenceValue);
@@ -200,5 +202,10 @@ public class SkinsEditor : Editor
                 sh.skinLeftHandImage.sprite = sh.skinRightHandImage.sprite = ((Sprite)element?.FindPropertyRelative("spriteSkinHand").objectReferenceValue);
             }
         sh.priceText.text = element.FindPropertyRelative("price").intValue.ToString();
+    }
+    private string ReplacingTickADot(float number)
+    {
+        string valueString = number.ToString();
+        return valueString = valueString.Replace(",",".");
     }
 }

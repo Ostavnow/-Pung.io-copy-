@@ -59,9 +59,9 @@ public class Hand : MonoBehaviour
             {
                 Instantiate(textPrefab,transform.position,Quaternion.identity,mainUIHandler.canvasTransform).GetComponent<TMP_Text>().text = randomRangeDamage.ToString();
             }
-            if(randomValue < 1)
+            if(randomValue < 99)
             {
-                GameManager.instance.user.amountMoney++;
+                GameManager.instance.user.amountMoney += 100;
                 mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
                 GameManager.instance.SaveUserProgress();
                 Instantiate(coinPrefab,transform.position,coinPrefab.transform.rotation);
