@@ -1767,7 +1767,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -516.0001, y: -3.4009476}
+  m_AnchoredPosition: {x: -1378.9999, y: -3.4009476}
   m_SizeDelta: {x: 0, y: 310.33}
   m_Pivot: {x: -0.000000016763806, y: 0.5}
 --- !u!114 &574111829
@@ -1823,7 +1823,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skins:
-  - skinIndex: 0
+  - attackDamage: 1
+    health: 1
+    stamina: 1
+    criticalDamage: 1
+    attackSpeed: 1
+    protection: 1
+    price: 100
+    spriteSkinBody: {fileID: 0}
+    spriteSkinHand: {fileID: 0}
+  prefabSkinCell: {fileID: 0}
 --- !u!1 &617042546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1869,6 +1878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   user:
+    id: 0
     userName: 
     email: 
     password: 
@@ -1876,7 +1886,16 @@ MonoBehaviour:
     purchasedSkins: 
     purchasedAbities: 
     numberSelectedSkin: 0
-    money: 0
+  skin:
+    attackDamage: 1
+    health: 1
+    stamina: 1
+    criticalDamage: 1
+    attackSpeed: 1
+    protection: 1
+    price: 100
+    spriteSkinBody: {fileID: 0}
+    spriteSkinHand: {fileID: 0}
 --- !u!1 &629867263
 GameObject:
   m_ObjectHideFlags: 0
@@ -2789,7 +2808,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 787445399}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2051472044}
+        m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
+        m_MethodName: PurchaseGameCurrency
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &787445399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3431,7 +3462,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 955431000}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2051472044}
+        m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
+        m_MethodName: PurchaseGameCurrency
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &955431000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3705,7 +3748,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1027537784}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2051472044}
+        m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
+        m_MethodName: PurchaseGameCurrency
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1027537784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3837,7 +3892,6 @@ GameObject:
   - component: {fileID: 1069192623}
   - component: {fileID: 1069192622}
   - component: {fileID: 1069192621}
-  - component: {fileID: 1069192625}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3932,42 +3986,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1069192625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069192620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aed4f77be0180774ba99378bf55039bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skinCharacteristicsUI: []
-  c_Skins: {fileID: 574111831}
-  healthStripe: {fileID: 0}
-  staminaStripe: {fileID: 0}
-  XPStripe: {fileID: 0}
-  textOfHealthStrip: {fileID: 0}
-  textOfStaminaStrip: {fileID: 0}
-  attackDamageText: {fileID: 0}
-  healthText: {fileID: 0}
-  staminaText: {fileID: 0}
-  criticalDamageText: {fileID: 0}
-  attackSpeedText: {fileID: 0}
-  multiplierAttackDamageImprovementText: {fileID: 0}
-  healthImprovementMultiplierText: {fileID: 0}
-  staminaImprovementMultiplierText: {fileID: 0}
-  criticalDamageImprovementMultiplierText: {fileID: 0}
-  attackSpeedImprovementMultiplierText: {fileID: 0}
-  numberImproventsText: {fileID: 0}
-  levelText: {fileID: 0}
-  comboText: {fileID: 0}
-  loginPanel: {fileID: 0}
-  registerPanel: {fileID: 0}
-  Background: {fileID: 0}
-  canvasTransform: {fileID: 0}
 --- !u!1 &1094379974
 GameObject:
   m_ObjectHideFlags: 0
@@ -4203,7 +4221,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1112530172}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2051472044}
+        m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
+        m_MethodName: PurchaseGameCurrency
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1112530172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4679,7 +4709,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1363023205}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2051472044}
+        m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
+        m_MethodName: PurchaseGameCurrency
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1363023205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4922,8 +4964,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1631443503}
   m_HandleRect: {fileID: 466516817}
   m_Direction: 0
-  m_Value: 0.00000007072442
-  m_Size: 0.5445911
+  m_Value: 0.9999999
+  m_Size: 0.54459107
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5410,7 +5452,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 11626
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a4115c16c52994298f029a14a55bd1, type: 2}
   m_sharedMaterial: {fileID: 6695125776238255976, guid: c7a4115c16c52994298f029a14a55bd1, type: 2}
@@ -5857,7 +5899,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1983964537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2051472044}
+        m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
+        m_MethodName: PurchaseGameCurrency
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1983964537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6031,6 +6085,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000272431}
   m_CullTransparentMesh: 1
+--- !u!1 &2051472043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2051472045}
+  - component: {fileID: 2051472044}
+  m_Layer: 0
+  m_Name: MainUIHundler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2051472044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051472043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed4f77be0180774ba99378bf55039bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinCharacteristicsUI: []
+  skins: {fileID: 0}
+  donateSlots: 000000001027000050c3000000000000400d030020a10700
+  healthStripe: {fileID: 0}
+  staminaStripe: {fileID: 0}
+  XPStripe: {fileID: 0}
+  textOfHealthStrip: {fileID: 0}
+  textOfStaminaStrip: {fileID: 0}
+  attackDamageText: {fileID: 0}
+  healthText: {fileID: 0}
+  staminaText: {fileID: 0}
+  criticalDamageText: {fileID: 0}
+  attackSpeedText: {fileID: 0}
+  multiplierAttackDamageImprovementText: {fileID: 0}
+  healthImprovementMultiplierText: {fileID: 0}
+  staminaImprovementMultiplierText: {fileID: 0}
+  criticalDamageImprovementMultiplierText: {fileID: 0}
+  attackSpeedImprovementMultiplierText: {fileID: 0}
+  numberImproventsText: {fileID: 0}
+  levelText: {fileID: 0}
+  comboText: {fileID: 0}
+  moneyCounterTextMenu: {fileID: 0}
+  moneyCounterTextGame: {fileID: 0}
+  loginPanel: {fileID: 0}
+  registerPanel: {fileID: 0}
+  skinCell: {fileID: 0}
+  background: {fileID: 0}
+  canvasTransform: {fileID: 0}
+--- !u!4 &2051472045
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051472043}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.389353, y: 2.3731143, z: 0.11635192}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2082564343
 GameObject:
   m_ObjectHideFlags: 0

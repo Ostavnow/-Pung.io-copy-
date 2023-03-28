@@ -1,18 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Ability : MonoBehaviour
+using System;
+[Serializable]
+public class Ability
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Sprite spriteAbility;
+    public int price;
+    public AbilitiesEnum abilityType;
 }

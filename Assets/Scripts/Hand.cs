@@ -7,7 +7,7 @@ public class Hand : MonoBehaviour
     [HideInInspector]
     public float damage;
     [HideInInspector]
-    public float speed;
+    private float speed = 5;
     [HideInInspector]
     public Quaternion direction;
     [HideInInspector]
@@ -22,6 +22,7 @@ public class Hand : MonoBehaviour
     [SerializeField]
     private GameObject textPrefab;
     private MainUIHandler mainUIHandler;
+    public float flightDistance = 2.5f;
     private void Start() {
         mainUIHandler = FindObjectOfType<MainUIHandler>();
     }
@@ -37,7 +38,7 @@ public class Hand : MonoBehaviour
         {
             transform.rotation = Quaternion.Lerp(transform.rotation,direction,speed * 3 * Time.deltaTime);
         }
-        if(Vector3.Distance(initialPosition,transform.position) > 2.5f)
+        if(Vector3.Distance(initialPosition,transform.position) > flightDistance)
         {
             Destroy(gameObject);
         }
@@ -59,9 +60,9 @@ public class Hand : MonoBehaviour
             {
                 Instantiate(textPrefab,transform.position,Quaternion.identity,mainUIHandler.canvasTransform).GetComponent<TMP_Text>().text = randomRangeDamage.ToString();
             }
-            if(randomValue < 99)
+            if(randomValue < 1)
             {
-                GameManager.instance.user.amountMoney += 100;
+                GameManager.instance.user.amountMoney += 1;
                 mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
                 GameManager.instance.SaveUserProgress();
                 Instantiate(coinPrefab,transform.position,coinPrefab.transform.rotation);

@@ -8,24 +8,18 @@ using System.IO;
 [CustomEditor(typeof(Skins))]
 public class SkinsEditor : Editor
 {
-    private bool isFoldout;
     private ReorderableList list = null;
-    private GUIContent healthLabel;
     private int indent = 10;
     private const int lengthSideSquare = 80;
     private Texture skinBodyTexture;
     private Texture skinHandTexture;
-    private int currentCountSkins;
     private Skins skins = null;
     private MainUIHandler mainUIHandler;
-    private const int storeSceneID = 2;
     private void OnEnable()
     {
-        if(SceneManager.GetActiveScene().buildIndex == 2)
+        if(SceneManager.GetActiveScene().name == "Shop")
         {
             mainUIHandler = FindObjectOfType<MainUIHandler>();
-            healthLabel = new GUIContent();
-            healthLabel.text = "Health";
             skins = ((Skins)target);
             list = new ReorderableList(serializedObject,serializedObject.FindProperty("skins"),true,true,true,true);
             list.drawElementCallback = DrawElementCallback;
@@ -39,12 +33,12 @@ public class SkinsEditor : Editor
             list.onAddCallback = list =>
             {
                 mainUIHandler = FindObjectOfType<MainUIHandler>();
-                mainUIHandler.UIAddSkinsToList(list,skins.prefabSkinCell);
+                mainUIHandler.AddSkinsToList(list,skins.prefabSkinCell);
             };
             list.onRemoveCallback = list => 
             {
                 mainUIHandler = FindObjectOfType<MainUIHandler>();
-                mainUIHandler.UIRemoveSkinToList(list);
+                mainUIHandler.RemoveSkinToList(list);
             };
             }
         }
@@ -52,11 +46,10 @@ public class SkinsEditor : Editor
     private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
     {
         var element = list.serializedProperty.GetArrayElementAtIndex(index);
-        SkinCharacteristicsUI skinCharacteristicsUI = mainUIHandler.skinCharacteristicsUI[index];
-            if(isActive)
+            if(index > 2)
             {
-                Debug.Log(index);
-            Debug.Log("Обновление");
+            SkinUIElements skinUIElement = mainUIHandler.skinUIElements[index - 3];
+            Debug.Log(index);
             EditorGUI.LabelField(new Rect(rect.x,rect.y,rect.width,EditorGUIUtility.singleLineHeight),new GUIContent(("Skin " + (index + 1))));
             // // The value of character characteristics
             EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 3,rect.y + EditorGUIUtility.singleLineHeight + 5,rect.width / 6 - indent,EditorGUIUtility.singleLineHeight),"ATK");
@@ -94,7 +87,7 @@ public class SkinsEditor : Editor
             EditorGUI.LabelField(new Rect(rect.x + rect.width / 2 - 30 - indent,rect.y + EditorGUIUtility.singleLineHeight * 8 + indent * 2,39,18),"Price");
             EditorGUI.PropertyField(new Rect(rect.x + rect.width / 2,rect.y + EditorGUIUtility.singleLineHeight * 8 + indent * 2,rect.width / 2,18),
             element.FindPropertyRelative("price"),GUIContent.none);
-            UpdateSkinCharacteristicsUI(element,skinCharacteristicsUI);
+            UpdateSkinCharacteristicsUI(element,skinUIElement);
             }
             else
             {
@@ -160,7 +153,7 @@ public class SkinsEditor : Editor
     {
         if(GUILayout.Button("Serialize"))
         {
-            SerializeClassSkins(((Skins)serializedObject.targetObject).skins);
+            GameManager.SerializeClassSkins(((Skins)serializedObject.targetObject).skins);
         }
         if(SceneManager.GetActiveScene().buildIndex == 2)
         {
@@ -170,34 +163,19 @@ public class SkinsEditor : Editor
         serializedObject.ApplyModifiedProperties();
         }
     }
-    private void SerializeClassSkins(List<Skin> skins)
+    private void UpdateSkinCharacteristicsUI(SerializedProperty element,SkinUIElements sh)
     {
-        string path = Application.persistentDataPath + "/skins.json";
-        File.WriteAllText(path,"");
-        using(StreamWriter sw = new StreamWriter(path))
-        {
-            for(int i = 0;i < skins.Count;i++)
-            {
-                string skin = JsonUtility.ToJson(skins[i]);
-                sw.WriteLine(skin);
-            }
-        }
-        Debug.Log("Sterilization was successful");
-    }
-    private void UpdateSkinCharacteristicsUI(SerializedProperty element,SkinCharacteristicsUI sh)
-    {
-        Debug.Log(sh.attackDamageText.text);
         sh.attackDamageText.text = ReplacingTickADot(element.FindPropertyRelative("attackDamage").floatValue);
         sh.healthText.text = ReplacingTickADot(element.FindPropertyRelative("health").floatValue);
         sh.staminaText.text = ReplacingTickADot(element.FindPropertyRelative("stamina").floatValue);
         sh.criticalDamageText.text = ReplacingTickADot(element.FindPropertyRelative("criticalDamage").floatValue);
         sh.attackSpeedText.text = ReplacingTickADot(element.FindPropertyRelative("attackSpeed").floatValue);
         sh.protectionText.text = ReplacingTickADot(element.FindPropertyRelative("protection").floatValue);
-        if(element?.FindPropertyRelative("spriteSkinBody").objectReferenceValue != null)
+        if(element?.FindPropertyRelative("spriteSkinBody")?.objectReferenceValue != null)
             {
                 sh.skinBodyImage.sprite = ((Sprite)element?.FindPropertyRelative("spriteSkinBody").objectReferenceValue);
             }
-            if(element?.FindPropertyRelative("spriteSkinHand").objectReferenceValue != null)
+            if(element?.FindPropertyRelative("spriteSkinHand")?.objectReferenceValue != null)
             {
                 sh.skinLeftHandImage.sprite = sh.skinRightHandImage.sprite = ((Sprite)element?.FindPropertyRelative("spriteSkinHand").objectReferenceValue);
             }

@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class AbilitySelectUI : MonoBehaviour , IDragHandler , IPointerDownHandler , IPointerUpHandler
 {
     private static GameObject currentAbility;
-    [SerializeField] GraphicRaycaster raycaster;
-    [SerializeField] EventSystem eventSystem;
+    private GraphicRaycaster raycaster;
+    private EventSystem eventSystem;
     private PointerEventData pointerEventData;
-    
+    public AbilitiesEnum abilityEnum;
+    public int numberSelectedAbility;
     private void Start()
     {
         raycaster = FindObjectOfType<GraphicRaycaster>();
@@ -31,10 +32,17 @@ public class AbilitySelectUI : MonoBehaviour , IDragHandler , IPointerDownHandle
         pointerEventData.position = Input.mousePosition;
         List<RaycastResult> results = new List<RaycastResult>();
         raycaster.Raycast(pointerEventData,results);
-        if(results.Count > 1 && results[1].gameObject.CompareTag("ability"))
+        GameObject abilityObject = results[1].gameObject;
+        if(results.Count > 1 && abilityObject.CompareTag("ability"))
         {
-            Debug.Log("Мы кликнули на " + results[1].gameObject.name);
-            results[1].gameObject.transform.GetChild(0).GetComponent<Image>().sprite = currentAbility.transform.GetChild(0).GetComponent<Image>().sprite;
+            AbilitySelectUI abilitySelectUI = abilityObject.GetComponent<AbilitySelectUI>();
+            AbilitiesEnum abilitiesEnum1 = abilitySelectUI.abilityEnum;
+            abilitySelectUI.abilityEnum = abilityEnum;
+            abilityEnum = abilitiesEnum1;
+            Sprite sprite = abilityObject.transform.GetChild(0).GetComponent<Image>().sprite; 
+            abilityObject.transform.GetChild(0).GetComponent<Image>().sprite = transform.GetChild(0).GetComponent<Image>().sprite;
+            transform.GetChild(0).GetComponent<Image>().sprite = sprite;
+            GameManager.instance.user.seletedAbilities[abilitySelectUI.numberSelectedAbility] = ((int)abilitySelectUI.abilityEnum);
         }
         Destroy(currentAbility);
     }

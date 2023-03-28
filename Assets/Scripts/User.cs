@@ -8,7 +8,8 @@ public class User
     public string email;
     public string password;
     public int amountMoney = 0;
-    public List<int> purchasedSkins = new List<int>();
-    public List<int> purchasedAbities = new List<int>();
+    public List<int> purchasedSkins = new List<int>(){0,1,2};
+    public List<int> purchasedAbilities = new List<int>(){0,1,2,3};
+    public int[] seletedAbilities = new int[4]{0,1,2,3};
     public int numberSelectedSkin = 0;
 }

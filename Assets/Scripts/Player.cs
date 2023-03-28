@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
         }
     }
     private float XPPercent;
-    private float p_attackDamage = 1f;
+    private float p_attackDamage = 1;
     private float upgradedAttackDamage;
     public float attackDamage
     {
@@ -56,6 +56,7 @@ public class Player : MonoBehaviour
         set
         {
             upgradedAttackDamage += value - p_attackDamage;
+            System.Math.Round(upgradedAttackDamage,1);
             p_attackDamage = value;
             if(upgradedAttackDamage == ((int)upgradedAttackDamage))
             {
@@ -63,11 +64,14 @@ public class Player : MonoBehaviour
             }
             else
             {
+                upgradedAttackDamage *= 10;
+                upgradedAttackDamage = (int)upgradedAttackDamage;
+                upgradedAttackDamage = upgradedAttackDamage / 10;
                 mainUIHandler.attackDamageText.text = upgradedAttackDamage.ToString();  
             }
         }
     }
-    private float p_criticalDamage = 1f;
+    private float p_criticalDamage = 1;
     private float upgradedCriticalDamage;
     public float criticalDamage
     {
@@ -75,6 +79,7 @@ public class Player : MonoBehaviour
         set
         {
             upgradedCriticalDamage += value - p_criticalDamage;
+            System.Math.Round(upgradedCriticalDamage,1);
             p_criticalDamage = value;
             if(upgradedCriticalDamage == ((int)upgradedCriticalDamage))
             {
@@ -86,7 +91,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    private float p_attackSpeed = 1f;
+    private float p_attackSpeed = 1;
     private float upgradedAttackSpeed;
     public float attackSpeed
     {
@@ -94,8 +99,9 @@ public class Player : MonoBehaviour
         set
         {
             upgradedAttackSpeed += value - p_attackSpeed;
+            System.Math.Round(upgradedAttackSpeed,1);
             p_attackSpeed = value;
-            if(value == ((int)value))
+            if(upgradedAttackSpeed == ((int)upgradedAttackSpeed))
             {
                 mainUIHandler.attackSpeedText.text = upgradedAttackSpeed.ToString() + ".0";
             }
@@ -113,6 +119,7 @@ public class Player : MonoBehaviour
         set
         {
             upgradedHealth += value - fullHealth;
+            System.Math.Round(upgradedHealth,1);
             HealthStripeUpdate();
             p_fullHealth = value;
             health = health;
@@ -134,6 +141,7 @@ public class Player : MonoBehaviour
         set
         {
             upgradedStamina += value - p_fullStamina;
+            System.Math.Round(upgradedStamina,1);
             StaminaStripeUpdate();
             p_fullStamina = value;
             stamina = stamina;
@@ -154,6 +162,7 @@ public class Player : MonoBehaviour
     public float attackSpeedImprovementMultiplier = 1f;
     private float nextLevel = 100f;
     private float p_numberImprovents = 20f;
+    public float experienceImprovementMultiplier = 1f;
     public float numberImprovents
     {
         get{return p_numberImprovents;}
@@ -213,6 +222,20 @@ public class Player : MonoBehaviour
         comboGameObject = GameObject.Find("Canvas").transform.GetChild(10).gameObject;
         comboAnimator = comboGameObject.GetComponent<Animator>();
         mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
+        PlayerController playerController = GetComponent<PlayerController>();
+        Skin skin = GameManager.DeserializeSkin(GameManager.instance.user.numberSelectedSkin);
+        GetComponent<SpriteRenderer>().sprite = skin.spriteSkinBody;
+        playerController.hand.GetComponent<SpriteRenderer>().sprite = skin.spriteSkinHand;
+        multiplierAttackDamageImprovement = skin.attackDamage;
+        healthImprovementMultiplier = skin.health;
+        staminaImprovementMultiplier = skin.stamina;
+        criticalDamageImprovementMultiplier = skin.criticalDamage;
+        attackSpeedImprovementMultiplier = skin.attackSpeed;
+        mainUIHandler.multiplierAttackDamageImprovementText.text = attackSpeedImprovementMultiplier.ToString();
+        mainUIHandler.healthImprovementMultiplierText.text = healthImprovementMultiplier.ToString();
+        mainUIHandler.staminaImprovementMultiplierText.text = staminaImprovementMultiplier.ToString();
+        mainUIHandler.criticalDamageImprovementMultiplierText.text = criticalDamageImprovementMultiplier.ToString();
+        mainUIHandler.attackSpeedImprovementMultiplierText.text = attackSpeedImprovementMultiplier.ToString();
     }
     void Update()
     {
@@ -244,7 +267,7 @@ public class Player : MonoBehaviour
     }
     public void Level()
     {
-        XPPercent += (100 / (nextLevel / 100));
+        XPPercent += experienceImprovementMultiplier * (100 / (nextLevel / 100));
         mainUIHandler.XPStripe.fillAmount = XPPercent / 100;
         if(XPPercent >= 100)
         {

@@ -144,7 +144,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Time: 1
   m_Parameters:
     serializedVersion: 3
@@ -224,10 +224,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  speed: 0
   direction: {x: 0, y: 0, z: 0, w: 0}
   initialPosition: {x: 0, y: 0, z: 0}
   isRightHand: 0
   criticalDamageChance: 0
   coinPrefab: {fileID: 941613297720161430, guid: c234650c7140fbb4e99034881dfe49d0, type: 3}
   textPrefab: {fileID: 6578524299318882037, guid: 3a79bdec06cc0ba41939600b1bfd8977, type: 3}
+  flightDistance: 2.5

@@ -1,0 +1,6 @@
+{"attackDamage":1.0,"health":3.0999999046325685,"stamina":1.0,"criticalDamage":1.0,"attackSpeed":1.0,"protection":1.0,"price":0,"spriteSkinBody":{"instanceID":25850},"spriteSkinHand":{"instanceID":25808}}
+{"attackDamage":1.0,"health":3.0,"stamina":1.0,"criticalDamage":1.0,"attackSpeed":1.100000023841858,"protection":1.0,"price":0,"spriteSkinBody":{"instanceID":26142},"spriteSkinHand":{"instanceID":32040}}
+{"attackDamage":1.0,"health":3.0,"stamina":1.100000023841858,"criticalDamage":1.0,"attackSpeed":1.0,"protection":1.0,"price":0,"spriteSkinBody":{"instanceID":30074},"spriteSkinHand":{"instanceID":26240}}
+{"attackDamage":1.2000000476837159,"health":3.0,"stamina":1.0,"criticalDamage":1.0,"attackSpeed":1.2000000476837159,"protection":1.0,"price":100,"spriteSkinBody":{"instanceID":29324},"spriteSkinHand":{"instanceID":31370}}
+{"attackDamage":1.2000000476837159,"health":3.0,"stamina":1.2000000476837159,"criticalDamage":1.0,"attackSpeed":1.0,"protection":1.0,"price":100,"spriteSkinBody":{"instanceID":28734},"spriteSkinHand":{"instanceID":31636}}
+{"attackDamage":1.5,"health":3.0,"stamina":1.2000000476837159,"criticalDamage":1.0,"attackSpeed":1.5,"protection":1.0,"price":500,"spriteSkinBody":{"instanceID":32272},"spriteSkinHand":{"instanceID":31816}}
