@@ -106,43 +106,48 @@ public class Player : MonoBehaviour, IPlayerData
         }
     }
     private float p_fullHealth = 200f;
+    protected float updateFullHealth;
     public float fullHealth
     {
         get{return p_fullHealth;}
         set
         {
+            updateFullHealth += value - p_fullHealth;
             p_fullHealth = value;
             System.Math.Round(p_fullHealth,1);
+            System.Math.Round(updateFullHealth,1);
             HealthStripeUpdate();
             health = health;
-            if(p_fullHealth == ((int)p_fullHealth))
+            if(updateFullHealth == ((int)updateFullHealth))
             {
-                mainUIHandler.healthText.text = p_fullHealth.ToString() + ".0";
+                mainUIHandler.healthText.text = updateFullHealth.ToString() + ".0";
             }
             else
             {
-                mainUIHandler.healthText.text = p_fullHealth.ToString();  
+                mainUIHandler.healthText.text = updateFullHealth.ToString();  
             }
         }
     }      
     private float p_fullStamina = 100f;
+    protected float updateFullStamina;
     public float fullStamina
     {
         get{return p_fullStamina;}
         set
         {
-            p_fullStamina += value - p_fullStamina;
+            updateFullStamina += value - p_fullStamina;
             System.Math.Round(p_fullStamina,1);
+            System.Math.Round(updateFullStamina,1);
             StaminaStripeUpdate();
             p_fullStamina = value;
             stamina = stamina;
-            if(p_fullStamina == ((int)p_fullStamina))
+            if(updateFullStamina == ((int)updateFullStamina))
             {
-                mainUIHandler.staminaText.text = p_fullStamina.ToString() + ".0";
+                mainUIHandler.staminaText.text = updateFullStamina.ToString() + ".0";
             }
             else
             {
-                mainUIHandler.staminaText.text = p_fullStamina.ToString();  
+                mainUIHandler.staminaText.text = updateFullStamina.ToString();  
             }
         }
     }
