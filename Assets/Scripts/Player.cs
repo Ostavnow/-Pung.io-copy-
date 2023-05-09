@@ -4,11 +4,11 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayerData
 {
     public string nickname;
     private float p_health = 200f;
-    private float health
+    protected float health
     {
         get{return p_health;}
         set
@@ -47,111 +47,102 @@ public class Player : MonoBehaviour
             mainUIHandler.levelText.text = p_level.ToString();
         }
     }
-    private float XPPercent;
+    protected float XPPercent;
     private float p_attackDamage = 1;
-    private float upgradedAttackDamage;
     public float attackDamage
     {
         get{return p_attackDamage;}
         set
         {
-            upgradedAttackDamage += value - p_attackDamage;
-            System.Math.Round(upgradedAttackDamage,1);
             p_attackDamage = value;
-            if(upgradedAttackDamage == ((int)upgradedAttackDamage))
+            System.Math.Round(p_attackDamage,1);
+            if(p_attackDamage == ((int)p_attackDamage))
             {
-                mainUIHandler.attackDamageText.text = upgradedAttackDamage.ToString() + ".0";
+                mainUIHandler.attackDamageText.text = p_attackDamage.ToString() + ".0";
             }
             else
             {
-                upgradedAttackDamage *= 10;
-                upgradedAttackDamage = (int)upgradedAttackDamage;
-                upgradedAttackDamage = upgradedAttackDamage / 10;
-                mainUIHandler.attackDamageText.text = upgradedAttackDamage.ToString();  
+                p_attackDamage *= 10;
+                p_attackDamage = (int)p_attackDamage;
+                p_attackDamage = p_attackDamage / 10;
+                mainUIHandler.attackDamageText.text = p_attackDamage.ToString();  
             }
         }
     }
     private float p_criticalDamage = 1;
-    private float upgradedCriticalDamage;
     public float criticalDamage
     {
         get{return p_criticalDamage;}
         set
         {
-            upgradedCriticalDamage += value - p_criticalDamage;
-            System.Math.Round(upgradedCriticalDamage,1);
+            System.Math.Round(p_criticalDamage,1);
             p_criticalDamage = value;
-            if(upgradedCriticalDamage == ((int)upgradedCriticalDamage))
+            if(p_criticalDamage == ((int)p_criticalDamage))
             {
-                mainUIHandler.criticalDamageText.text = upgradedCriticalDamage.ToString() + ".0";
+                mainUIHandler.criticalDamageText.text = p_criticalDamage.ToString() + ".0";
             }
             else
             {
-                mainUIHandler.criticalDamageText.text = upgradedCriticalDamage.ToString();  
+                mainUIHandler.criticalDamageText.text = p_criticalDamage.ToString();  
             }
         }
     }
     private float p_attackSpeed = 1;
-    private float upgradedAttackSpeed;
     public float attackSpeed
     {
         get{return p_attackSpeed;}
         set
         {
-            upgradedAttackSpeed += value - p_attackSpeed;
-            System.Math.Round(upgradedAttackSpeed,1);
             p_attackSpeed = value;
-            if(upgradedAttackSpeed == ((int)upgradedAttackSpeed))
+            System.Math.Round(p_attackSpeed,1);
+            if(p_attackSpeed == ((int)p_attackSpeed))
             {
-                mainUIHandler.attackSpeedText.text = upgradedAttackSpeed.ToString() + ".0";
+                mainUIHandler.attackSpeedText.text = p_attackSpeed.ToString() + ".0";
             }
             else
             {
-                mainUIHandler.attackSpeedText.text = upgradedAttackSpeed.ToString();  
+                mainUIHandler.attackSpeedText.text = p_attackSpeed.ToString();  
             }
         }
     }
     private float p_fullHealth = 200f;
-    private float upgradedHealth;
     public float fullHealth
     {
         get{return p_fullHealth;}
         set
         {
-            upgradedHealth += value - fullHealth;
-            System.Math.Round(upgradedHealth,1);
-            HealthStripeUpdate();
             p_fullHealth = value;
+            System.Math.Round(p_fullHealth,1);
+            HealthStripeUpdate();
             health = health;
-            if(upgradedHealth == ((int)upgradedHealth))
+            if(p_fullHealth == ((int)p_fullHealth))
             {
-                mainUIHandler.healthText.text = upgradedHealth.ToString() + ".0";
+                mainUIHandler.healthText.text = p_fullHealth.ToString() + ".0";
             }
             else
             {
-                mainUIHandler.healthText.text = upgradedHealth.ToString();  
+                mainUIHandler.healthText.text = p_fullHealth.ToString();  
             }
         }
     }      
     private float p_fullStamina = 100f;
-    private float upgradedStamina;
     public float fullStamina
     {
         get{return p_fullStamina;}
         set
         {
-            upgradedStamina += value - p_fullStamina;
-            System.Math.Round(upgradedStamina,1);
+            p_fullStamina += value - p_fullStamina;
+            System.Math.Round(p_fullStamina,1);
             StaminaStripeUpdate();
             p_fullStamina = value;
             stamina = stamina;
-            if(upgradedStamina == ((int)upgradedStamina))
+            if(p_fullStamina == ((int)p_fullStamina))
             {
-                mainUIHandler.staminaText.text = upgradedStamina.ToString() + ".0";
+                mainUIHandler.staminaText.text = p_fullStamina.ToString() + ".0";
             }
             else
             {
-                mainUIHandler.staminaText.text = upgradedStamina.ToString();  
+                mainUIHandler.staminaText.text = p_fullStamina.ToString();  
             }
         }
     }
@@ -160,7 +151,7 @@ public class Player : MonoBehaviour
     public float staminaImprovementMultiplier = 1f;
     public float criticalDamageImprovementMultiplier = 1f;
     public float attackSpeedImprovementMultiplier = 1f;
-    private float nextLevel = 100f;
+    protected float nextLevel = 100f;
     private float p_numberImprovents = 20f;
     public float experienceImprovementMultiplier = 1f;
     public float numberImprovents
@@ -180,9 +171,9 @@ public class Player : MonoBehaviour
             }
         }
     }
-    private bool isStaminaRegenerationRunning;
-    private bool isHealthRegenerationRunning;
-    private bool isCorutinaComboRunning;
+    protected bool isStaminaRegenerationRunning;
+    protected bool isHealthRegenerationRunning;
+    protected bool isCorutinaComboRunning;
     public Coroutine coroutineStaminaHundler;
     public Coroutine coroutineHealthHundler;
     public Coroutine coroutineComboHundler;
@@ -281,7 +272,7 @@ public class Player : MonoBehaviour
     {
         // Debug.Log("Мы убили игрока");
     }
-    private IEnumerator RegenerationHealth()
+    protected IEnumerator RegenerationHealth()
     {
         isHealthRegenerationRunning = true;
         mainUIHandler.healthStripe.fillAmount = health / fullHealth;
@@ -329,4 +320,6 @@ public class Player : MonoBehaviour
         mainUIHandler.textOfStaminaStrip.text = "STM" + ((int)stamina).ToString() + "/" + fullStamina;
         mainUIHandler.staminaStripe.fillAmount = stamina / fullStamina;
     }
+    public float GetPowerScore() => level * healthImprovementMultiplier * staminaImprovementMultiplier * attackSpeedImprovementMultiplier
+                                    * criticalDamageImprovementMultiplier * multiplierAttackDamageImprovement;
 }

@@ -8,6 +8,7 @@ TagManager:
   - Hand
   - Test
   - ability
+  - punching bag
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - Hand
   - punching bag
-  - 
+  - Background
   - 
   - 
   - 

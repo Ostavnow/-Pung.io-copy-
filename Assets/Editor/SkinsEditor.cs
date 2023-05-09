@@ -130,14 +130,8 @@ public class SkinsEditor : Editor
                 element.FindPropertyRelative("price"),GUIContent.none);
             }
             skinBodyTexture = skinHandTexture = null;
-            if(element?.FindPropertyRelative("spriteSkinBody").objectReferenceValue != null)
-            {
-                skinBodyTexture = ((Sprite)element?.FindPropertyRelative("spriteSkinBody").objectReferenceValue).texture;
-            }
-            if(element?.FindPropertyRelative("spriteSkinHand").objectReferenceValue != null)
-            {
-                skinHandTexture = ((Sprite)element?.FindPropertyRelative("spriteSkinHand").objectReferenceValue).texture;
-            }
+                skinBodyTexture = ((Sprite)element?.FindPropertyRelative("spriteSkinBody")?.objectReferenceValue)?.texture;
+                skinHandTexture = ((Sprite)element?.FindPropertyRelative("spriteSkinHand")?.objectReferenceValue)?.texture;
                 Rect upperRect = new Rect(rect.x,rect.y + EditorGUIUtility.singleLineHeight * 2 + 5,lengthSideSquare,lengthSideSquare);
                 Rect lowerRect = new Rect(rect.x + lengthSideSquare,rect.y + EditorGUIUtility.singleLineHeight * 4 + indent * 3,lengthSideSquare / 2,lengthSideSquare / 2);
                 if(skinBodyTexture != null)

@@ -15,21 +15,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public GameObject hand;
     public GameObject shield;
-    private Transform handRightPoint;
-    private Transform handLeftPoint;
+    public Transform handRightPoint;
+    public Transform handLeftPoint;
     [HideInInspector]
     public Player player;
     private bool isWillNextBlowBeRightSide;
     private bool isWillNextBlowBeRightSide1;
     [SerializeField]
-    private float timeAfterWhichBeNextBlow = 5f;
+    public float timeAfterWhichBeNextBlow = 0.5f;
     private const float timeAfterWhichBeNextBlowConst = 0.5f;
     private float time;
     private float timeFourarms;
     private float attackSpeed = 1;
     public bool isActivePunchSwarm;
     public bool isActiveDash;
-    public bool isFourarms;
     private GameManager gameManager;
     public float flightDistance = 2.5f;
     private bool isFirstAbilityRecovered = true;
@@ -56,36 +55,12 @@ public class PlayerController : MonoBehaviour
         {
             time -= Time.deltaTime;
         }
-        if(isFourarms & timeFourarms >= 0)
-        {
-            timeFourarms -= Time.deltaTime;
-        }
-        else if(isFourarms & timeFourarms <= 0)
-        {
-            timeFourarms = timeAfterWhichBeNextBlow;
-            Vector3 randomPosition;
-        float handRadius = hand.GetComponent<CircleCollider2D>().radius;
-        Vector3 randomValue = new Vector3(Random.Range(-0.25f,0.25f),Random.Range(-0.25f,0.25f));
-            if(isWillNextBlowBeRightSide1)
-            {
-                randomPosition = new Vector3(handRightPoint.position.x + randomValue.x,handRightPoint.position.y + randomValue.y,0);
-                isWillNextBlowBeRightSide1 = false;
-                HandCreate(randomPosition,360);
-            }
-            else
-            {
-                randomPosition = new Vector3(handLeftPoint.position.x + randomValue.x,handLeftPoint.position.y + randomValue.y,0);
-                isWillNextBlowBeRightSide1 = true;
-                HandCreate(randomPosition,360);
-            }
-        }
         if(Mathf.Abs(attackJoystick.Horizontal) != 0f || Mathf.Abs(attackJoystick.Vertical) != 0f)
         {
             speed = 1;
             rotZ = Mathf.Atan2(attackJoystick.Vertical,attackJoystick.Horizontal) * Mathf.Rad2Deg - 90;
             if(time <= 0 && (Mathf.Abs(attackJoystick.Horizontal) > 0.7f | Mathf.Abs(attackJoystick.Vertical) > 0.7f) & !(player.stamina <= 0))
             {
-                time = timeAfterWhichBeNextBlow;
                 Hit();
             }
         }
@@ -109,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
     private void Hit()
     {
+        time = timeAfterWhichBeNextBlow;
         if(isActivePunchSwarm)
         {
             PunchSwarm();
@@ -120,7 +96,7 @@ public class PlayerController : MonoBehaviour
     StopCoroutine(player.coroutineStaminaHundler);
     player.coroutineStaminaHundler = StartCoroutine(player.RegenerationStamina());
     }
-    private void HandCreate(Vector3 randomPosition,float impactSpreat)
+    public void HandCreate(Vector3 randomPosition,float impactSpreat,ref bool isWillNextBlowBeRightSide)
     {
         GameObject currentHandGameObject;
         Hand currentHand;
@@ -129,12 +105,12 @@ public class PlayerController : MonoBehaviour
         if(isWillNextBlowBeRightSide)
         {
             currentHandGameObject = Instantiate(hand,randomPosition,Quaternion.Euler(0f,0f,transform.eulerAngles.z - 20 - Random.Range(0,30)));
-            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z + Random.Range(0f,impactSpreat)));
+            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z + Random.Range(5f,impactSpreat)));
         }
         else
         {
             currentHandGameObject = Instantiate(hand,randomPosition,Quaternion.Euler(0f,0f,transform.eulerAngles.z + 20 + Random.Range(0,30)));
-            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z - Random.Range(0f,impactSpreat)));
+            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z - Random.Range(5f,impactSpreat)));
         }
         currentHand = currentHandGameObject.GetComponent<Hand>();
         currentHand.isRightHand = isWillNextBlowBeRightSide;
@@ -154,12 +130,12 @@ public class PlayerController : MonoBehaviour
             if(isWillNextBlowBeRightSide)
             {
                 randomPosition = new Vector3(handRightPoint.position.x + randomValue.x,handRightPoint.position.y + randomValue.y,0);
-                HandCreate(randomPosition,10);
+                HandCreate(randomPosition,20,ref isWillNextBlowBeRightSide);
             }
             else
             {
                 randomPosition = new Vector3(handLeftPoint.position.x + randomValue.x,handLeftPoint.position.y + randomValue.y,0);
-                HandCreate(randomPosition,10);
+                HandCreate(randomPosition,20,ref isWillNextBlowBeRightSide);
             }
     }
     private void PunchSwarm()
@@ -172,7 +148,7 @@ public class PlayerController : MonoBehaviour
             for(int i = 0;i < 3;i++)
             {
                 randomPosition = new Vector3(handRightPoint.position.x + randomValue.x,handRightPoint.position.y + randomValue.y,0);
-                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),10);
+                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),10,ref isWillNextBlowBeRightSide);
             }
         }
         else
@@ -180,7 +156,7 @@ public class PlayerController : MonoBehaviour
             for(int i = 0;i < 3;i++)
             {
                 randomPosition = new Vector3(handLeftPoint.position.x + randomValue.x,handLeftPoint.position.y + randomValue.y,0);
-                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),10);
+                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),10,ref isWillNextBlowBeRightSide);
             }
         }
     }
@@ -218,28 +194,31 @@ public class PlayerController : MonoBehaviour
     }
     public void ImproveAttackSpeed()
     {
-        if(player.numberImprovents > 0 & player.attackSpeed < 1000)
+        if(player.numberImprovents > 0 & player.attackSpeed < 350)
         {
         player.numberImprovents--;
         player.attackSpeed += player.attackSpeedImprovementMultiplier * 1;
-        timeAfterWhichBeNextBlow = timeAfterWhichBeNextBlowConst - (player.attackSpeed / 700f);
-        if(timeAfterWhichBeNextBlowConst - (player.attackSpeed / 700f) < 0.01f)
+        timeAfterWhichBeNextBlow = timeAfterWhichBeNextBlowConst / Mathf.Pow(1.00915f,player.attackSpeed);
+        if(timeAfterWhichBeNextBlow < 0.02f)
         {
-            timeAfterWhichBeNextBlow = 0.01f;
-        }
-        if(player.attackSpeed > 1000)
-        {
-            player.attackSpeed = 1000;
+            timeAfterWhichBeNextBlow = 0.02f;
         }
         }
     }
     private IEnumerator FirstAbilityCoroutine()
     {
-        float[] numbers = GameManager.instance.firstAbilityDelegate?.Invoke(this,true);
+        Abilities.Closures closures = GameManager.instance.firstAbilityDelegate?.Invoke(this,true);
+        float[] numbers = closures?.Invoke();
         isFirstAbilityRecovered = false;
+        float timeActive = numbers[0];
         StartCoroutine(RestoringFirstAbilityCorutine(numbers[1]));
-        yield return new WaitForSeconds(numbers[0]);
-        GameManager.instance.firstAbilityDelegate?.Invoke(this,false);
+        while(timeActive > 0)
+        {
+            timeActive -= Time.deltaTime;
+            closures?.Invoke();
+            yield return null;
+        }
+        GameManager.instance.firstAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringFirstAbilityCorutine(float recoveryTime)
     {
@@ -255,11 +234,18 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator SecondAbilityCoroutine()
     {
-        float[] numbers = GameManager.instance.secondAbilityDelegate?.Invoke(this,true);
-        isSecondAbilityRecovered = false;
+        Abilities.Closures closures = GameManager.instance.secondAbilityDelegate?.Invoke(this,true);
+        float[] numbers = closures?.Invoke();
+        isFirstAbilityRecovered = false;
+        float timeActive = numbers[0];
         StartCoroutine(RestoringSecondAbilityCorutine(numbers[1]));
-        yield return new WaitForSeconds(numbers[0]);
-        GameManager.instance.secondAbilityDelegate?.Invoke(this,false);
+        while(timeActive > 0)
+        {
+            timeActive -= Time.deltaTime;
+            closures?.Invoke();
+            yield return null;
+        }
+        GameManager.instance.secondAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringSecondAbilityCorutine(float recoveryTime)
     {
@@ -275,11 +261,18 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator ThirdAbilityCoroutine()
     {
-        float[] numbers = GameManager.instance.thirdAbilityDelegate?.Invoke(this,true);
-        isThirdAbilityRecovered = false;
+        Abilities.Closures closures = GameManager.instance.thirdAbilityDelegate?.Invoke(this,true);
+        float[] numbers = closures?.Invoke();
+        isFirstAbilityRecovered = false;
+        float timeActive = numbers[0];
         StartCoroutine(RestoringThirdAbilityCorutine(numbers[1]));
-        yield return new WaitForSeconds(numbers[0]);
-        GameManager.instance.thirdAbilityDelegate?.Invoke(this,false);
+        while(timeActive > 0)
+        {
+            timeActive -= Time.deltaTime;
+            closures?.Invoke();
+            yield return null;
+        }
+        GameManager.instance.thirdAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringThirdAbilityCorutine(float recoveryTime)
     {
@@ -295,11 +288,19 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator FourthAbilityCoroutine()
     {
-        float[] numbers = GameManager.instance.fourthAbilityDelegate?.Invoke(this,true);
-        isFourthAbilityRecovered = false;
+        Abilities.Closures closures = GameManager.instance.fourthAbilityDelegate?.Invoke(this,true);
+        float[] numbers = closures?.Invoke();
+        isFirstAbilityRecovered = false;
+        float timeActive = numbers[0];
         StartCoroutine(RestoringFourthAbilityCorutine(numbers[1]));
-        yield return new WaitForSeconds(numbers[0]);
-        GameManager.instance.fourthAbilityDelegate?.Invoke(this,false);
+        while(timeActive > 0)
+        {
+            timeActive -= Time.deltaTime;
+            Debug.Log("Первая способность была активированна");
+            closures?.Invoke();
+            yield return null;
+        }
+        GameManager.instance.fourthAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringFourthAbilityCorutine(float recoveryTime)
     {

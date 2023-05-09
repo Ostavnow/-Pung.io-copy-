@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
-    private GameObject player;
+    private Transform player;
     void Start()
     {
-        player = FindObjectOfType<PlayerController>().gameObject;
+        player = FindObjectOfType<Player>().transform;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = player.transform.position - new Vector3(0,0,10);
+        transform.position = player.position - new Vector3(0,0,10);
     }
 }

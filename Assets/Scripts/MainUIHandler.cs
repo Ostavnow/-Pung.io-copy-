@@ -112,7 +112,7 @@ public class MainUIHandler : MonoBehaviour
             textOfStaminaStrip = canvasTransform.GetChild(4).GetChild(2).GetChild(2).GetComponent<TMP_Text>();
             XPStripe = canvasTransform.GetChild(4).GetChild(5).GetChild(1).GetComponent<Image>();
             levelText = canvasTransform.GetChild(11).GetChild(0).GetChild(0).GetComponent<TMP_Text>();
-            numberImproventsText = canvasTransform.GetChild(6).GetChild(6).GetChild(0).GetComponent<TMP_Text>();
+            numberImproventsText = canvasTransform.GetChild(6).GetChild(5).GetChild(0).GetComponent<TMP_Text>();
             comboText = canvasTransform.GetChild(10).GetChild(0).GetComponent<TMP_Text>();
             multiplierAttackDamageImprovementText = canvasTransform.transform.GetChild(6).GetChild(0).GetChild(1).GetComponent<TMP_Text>();
             healthImprovementMultiplierText = canvasTransform.transform.GetChild(6).GetChild(1).GetChild(1).GetComponent<TMP_Text>();
@@ -128,6 +128,7 @@ public class MainUIHandler : MonoBehaviour
             scrollbarBackground = canvasTransform.GetChild(13).GetChild(1).GetChild(0).GetComponent<RectTransform>();
             scrollbarSound = canvasTransform.GetChild(13).GetChild(1).GetComponent<Scrollbar>();
             settingPanel = canvasTransform.GetChild(13).gameObject;
+            Debug.Log(settingPanel);
             firstAbilityImage = canvasTransform.GetChild(4).GetChild(3).GetChild(0).GetChild(0).GetComponent<Image>();
             secondAbilityImage = canvasTransform.GetChild(4).GetChild(3).GetChild(1).GetChild(0).GetComponent<Image>();
             thirdAbilityImage = canvasTransform.GetChild(4).GetChild(3).GetChild(2).GetChild(0).GetComponent<Image>();
