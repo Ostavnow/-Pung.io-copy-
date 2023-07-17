@@ -9583,21 +9583,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38579ee92dc5e943845179a7448c982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botStates: 0
-  level: 0
   nickname: 
   money: 0
-  attackDamage: 1
-  attackSpeed: 1
-  fullHealth: 200
-  fullStamina: 100
   multiplierAttackDamageImprovement: 1
   healthImprovementMultiplier: 1
   staminaImprovementMultiplier: 1
   criticalDamageImprovementMultiplier: 1
   attackSpeedImprovementMultiplier: 1
   experienceImprovementMultiplier: 1
-  numberImprovents: 20
+  botStates: 0
   timeAfterWhichBeNextBlow: 0.5
   hand: {fileID: 4004167681953722752, guid: 5d2d532bc237f2b4db890f90368d01ce, type: 3}
   shield: {fileID: 0}
@@ -13882,21 +13876,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38579ee92dc5e943845179a7448c982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botStates: 0
-  level: 0
   nickname: 
   money: 0
-  attackDamage: 1
-  attackSpeed: 1
-  fullHealth: 200
-  fullStamina: 100
   multiplierAttackDamageImprovement: 1
   healthImprovementMultiplier: 1
   staminaImprovementMultiplier: 1
   criticalDamageImprovementMultiplier: 1
   attackSpeedImprovementMultiplier: 1
   experienceImprovementMultiplier: 1
-  numberImprovents: 20
+  botStates: 0
   timeAfterWhichBeNextBlow: 0.5
   hand: {fileID: 4004167681953722752, guid: 5d2d532bc237f2b4db890f90368d01ce, type: 3}
   shield: {fileID: 0}
@@ -15479,7 +15467,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7801182125823798507, guid: 29f3be48c88b7db4aafa51d2fd5c3744, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29f3be48c88b7db4aafa51d2fd5c3744, type: 3}
@@ -15511,21 +15499,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38579ee92dc5e943845179a7448c982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botStates: 0
-  level: 0
   nickname: 
   money: 0
-  attackDamage: 1
-  attackSpeed: 1
-  fullHealth: 200
-  fullStamina: 100
   multiplierAttackDamageImprovement: 1
   healthImprovementMultiplier: 1
   staminaImprovementMultiplier: 1
   criticalDamageImprovementMultiplier: 1
   attackSpeedImprovementMultiplier: 1
   experienceImprovementMultiplier: 1
-  numberImprovents: 20
+  botStates: 0
   timeAfterWhichBeNextBlow: 0.5
   hand: {fileID: 4004167681953722752, guid: 5d2d532bc237f2b4db890f90368d01ce, type: 3}
   shield: {fileID: 0}

@@ -9,6 +9,8 @@ TagManager:
   - Test
   - ability
   - punching bag
+  - player canvas
+  - Bot
   layers:
   - Default
   - TransparentFX

@@ -3,41 +3,40 @@ using UnityEngine;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-public class GameManager : MonoBehaviour
+public sealed class GameManager : MonoBehaviour
 {
-    public User user;
-    public static GameManager instance;
-    public Skin skin;
-    public Abilities.AbilityDelegate firstAbilityDelegate;
-    public Abilities.AbilityDelegate secondAbilityDelegate;
-    public Abilities.AbilityDelegate thirdAbilityDelegate;
-    public Abilities.AbilityDelegate fourthAbilityDelegate;
-    private Abilities abilities;
-    private static string path
+    public User _user;
+    public static GameManager _instance;
+    public Skin _skin;
+    public Abilities.AbilityDelegate _firstAbilityDelegate;
+    public Abilities.AbilityDelegate _secondAbilityDelegate;
+    public Abilities.AbilityDelegate _thirdAbilityDelegate;
+    public Abilities.AbilityDelegate _fourthAbilityDelegate;
+    private Abilities _abilities;
+    private static string Path
     {
         get{return Application.persistentDataPath + "/saveFile.json";}
     }
-    private static string accountsDatabasePath
+    private static string AccountsDatabasePath
     {
         get{return Application.persistentDataPath + "/accountsDatabase.json";}
     }
     private void Awake()
     {
         Application.targetFrameRate = 300;
-        // user = null;
-        if(instance != null)
+        if(_instance != null)
         {
             Destroy(gameObject);
         }
         else
         {
-            instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
         }
         if(SceneManager.GetActiveScene().name == "Menu")
         {
             AuthorizationVerification();
-            abilities = GetComponent<Abilities>();
+            _abilities = GetComponent<Abilities>();
         }
     }
     public static void LoadMenuScene()
@@ -55,18 +54,31 @@ public class GameManager : MonoBehaviour
     public static void LoadGame()
     {
         MainUIHandler mainUIHandler = FindObjectOfType<MainUIHandler>();
-        GameManager g = FindObjectOfType<GameManager>();
-        Debug.Log(((int)mainUIHandler.firstAbilitySelected.GetComponent<AbilitySelectUI>().abilityEnum));
-        Debug.Log(((int)mainUIHandler.secondAbilitySelected.GetComponent<AbilitySelectUI>().abilityEnum));
-        g.firstAbilityDelegate = Abilities.abilitiesDelegate[((int)mainUIHandler.firstAbilitySelected.GetComponent<AbilitySelectUI>().abilityEnum)];
-        g.secondAbilityDelegate = Abilities.abilitiesDelegate[((int)mainUIHandler.secondAbilitySelected.GetComponent<AbilitySelectUI>().abilityEnum)];
-        g.thirdAbilityDelegate = Abilities.abilitiesDelegate[((int)mainUIHandler.thirdAbilitySelected.GetComponent<AbilitySelectUI>().abilityEnum)];
-        g.fourthAbilityDelegate = Abilities.abilitiesDelegate[((int)mainUIHandler.fourthAbilitySelected.GetComponent<AbilitySelectUI>().abilityEnum)];
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        // Debug.Log(((int)mainUIHandler._firstAbilitySelected.GetComponent<AbilitySelectUI>()._abilityEnum));
+        // Debug.Log(((int)mainUIHandler._secondAbilitySelected.GetComponent<AbilitySelectUI>()._abilityEnum));
+        gameManager._firstAbilityDelegate = Abilities._abilitiesDelegate[((int)mainUIHandler._firstAbilitySelected.GetComponent<AbilitySelectUI>()._abilityEnum)];
+        gameManager._secondAbilityDelegate = Abilities._abilitiesDelegate[((int)mainUIHandler._secondAbilitySelected.GetComponent<AbilitySelectUI>()._abilityEnum)];
+        gameManager._thirdAbilityDelegate = Abilities._abilitiesDelegate[((int)mainUIHandler._thirdAbilitySelected.GetComponent<AbilitySelectUI>()._abilityEnum)];
+        gameManager._fourthAbilityDelegate = Abilities._abilitiesDelegate[((int)mainUIHandler._fourthAbilitySelected.GetComponent<AbilitySelectUI>()._abilityEnum)];
         SceneManager.LoadScene("Game");
+    }
+    public void UpdateSkin()
+    {
+        PlayerController playerController = FindObjectOfType<UserPlayerController>();
+        UserPlayer userPlayer = FindObjectOfType<UserPlayer>();
+        Skin skin = GameManager.DeserializeSkin(GameManager._instance._user._numberSelectedSkin);
+        userPlayer.gameObject.GetComponent<SpriteRenderer>().sprite = skin._spriteSkinBody;
+        playerController.hand.GetComponent<SpriteRenderer>().sprite = skin._spriteSkinHand;
+        userPlayer._multiplierAttackDamageImprovement = skin._attackDamage;
+        userPlayer._healthImprovementMultiplier = skin._health;
+        userPlayer._staminaImprovementMultiplier = skin._stamina;
+        userPlayer._criticalDamageImprovementMultiplier = skin._criticalDamage;
+        userPlayer._attackSpeedImprovementMultiplier = skin._attackSpeed;
     }
     public void SaveUserDatabase(User user)
     {
-        using(StreamReader reader = new StreamReader(accountsDatabasePath))
+        using(StreamReader reader = new StreamReader(AccountsDatabasePath))
         {
             int i = 0;
             while(!reader.EndOfStream)
@@ -74,33 +86,33 @@ public class GameManager : MonoBehaviour
                 reader.ReadLine();
                 i++;
             }
-            user.id = i;
+            user._id = i;
         }
-        using(StreamWriter writer = new StreamWriter(accountsDatabasePath,true))
+        using(StreamWriter writer = new StreamWriter(AccountsDatabasePath,true))
         {
             string data = JsonUtility.ToJson(user);
             writer.WriteLine(data);
         }
-        this.user = user;
+        this._user = user;
     }
     public void SaveUserProgress()
     {
-        string data = JsonUtility.ToJson(user);
-        Debug.Log(user.email);
-        if(File.Exists(accountsDatabasePath))
+        string data = JsonUtility.ToJson(_user);
+        Debug.Log(_user._email);
+        if(File.Exists(AccountsDatabasePath))
         {
-            RewrateLine(accountsDatabasePath,user.id,data);
+            RewrateLine(AccountsDatabasePath,_user._id,data);
         }
         else
         {
-            File.WriteAllText(path,data);
+            File.WriteAllText(Path,data);
         }
     }
     public static string AccountDataSearch(string email)
     {
-        if(File.Exists(path))
+        if(File.Exists(Path))
         {
-            using(StreamReader reader = new StreamReader(accountsDatabasePath))
+            using(StreamReader reader = new StreamReader(AccountsDatabasePath))
             {
                 while(!(reader.EndOfStream))
                 {
@@ -137,7 +149,7 @@ public class GameManager : MonoBehaviour
     }
     public static bool CheckingExistingEmail(string verifiedEmail)
     {
-        using(StreamReader sr = new StreamReader(accountsDatabasePath))
+        using(StreamReader sr = new StreamReader(AccountsDatabasePath))
         {
             while(!sr.EndOfStream)
             {
@@ -155,8 +167,8 @@ public class GameManager : MonoBehaviour
         string data = Resources.Load<TextAsset>("Text/skins").text;
         string[] d = data.Split("\n",9);
         Skin skin = JsonUtility.FromJson<Skin>(d[id]);
-        skin.spriteSkinBody = Resources.Load<Sprite>("Sprites/Skins/body " + (id + 1) + " skin");
-        skin.spriteSkinHand = Resources.Load<Sprite>("Sprites/Skins/hand " + (id + 1) + " skin");
+        skin._spriteSkinBody = Resources.Load<Sprite>("Sprites/Skins/body " + (id + 1) + " skin");
+        skin._spriteSkinHand = Resources.Load<Sprite>("Sprites/Skins/hand " + (id + 1) + " skin");
         return skin;
     }
     public static Ability DeserializeAbility(int id)
@@ -164,24 +176,24 @@ public class GameManager : MonoBehaviour
         string data = Resources.Load<TextAsset>("Text/abilities").text;
         string[] d = data.Split("\n",9);
         Ability ability = JsonUtility.FromJson<Ability>(d[id]);
-        ability.spriteAbility = Resources.Load<Sprite>("Sprites/Abilities/ability icon " + (id + 1));
+        ability._spriteAbility = Resources.Load<Sprite>("Sprites/Abilities/ability icon " + (id + 1));
         return ability;
     }
     private void AuthorizationVerification()
     {
-        if(File.Exists(path))
+        if(File.Exists(Path))
         {
-        string localData = File.ReadAllText(path);
+        string localData = File.ReadAllText(Path);
         string email = localData.Split('"',11)[9];
-        user = JsonUtility.FromJson<User>(localData);
+        _user = JsonUtility.FromJson<User>(localData);
         if(email != "")
         {
-           user = JsonUtility.FromJson<User>(AccountDataSearch(email));
+           _user = JsonUtility.FromJson<User>(AccountDataSearch(email));
         }  
         }
         else
         {
-            user = new User();
+            _user = new User();
             SaveUserProgress();
             return;
         }

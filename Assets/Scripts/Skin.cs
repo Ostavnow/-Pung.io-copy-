@@ -3,14 +3,14 @@ using System;
 [Serializable]
 public class Skin
 {
-    public float attackDamage = 1f;
-    public float health = 1f;
-    public float stamina = 1f;
-    public float criticalDamage = 1f;
-    public float attackSpeed = 1f;
-    public float protection = 1f;
-    public int price = 100;
-    public Sprite spriteSkinBody;
+    public float _attackDamage = 1f;
+    public float _health = 1f;
+    public float _stamina = 1f;
+    public float _criticalDamage = 1f;
+    public float _attackSpeed = 1f;
+    public float _protection = 1f;
+    public int _price = 100;
+    public Sprite _spriteSkinBody;
 
-    public Sprite spriteSkinHand;
+    public Sprite _spriteSkinHand;
 }

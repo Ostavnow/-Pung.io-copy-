@@ -5,45 +5,45 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class AbilitySelectUI : MonoBehaviour , IDragHandler , IPointerDownHandler , IPointerUpHandler
 {
-    private static GameObject currentAbility;
-    private GraphicRaycaster raycaster;
-    private EventSystem eventSystem;
-    private PointerEventData pointerEventData;
-    public AbilitiesEnum abilityEnum;
-    public int numberSelectedAbility;
+    private static GameObject _currentAbility;
+    private GraphicRaycaster _raycaster;
+    private EventSystem _eventSystem;
+    private PointerEventData _pointerEventData;
+    public AbilitiesEnum _abilityEnum;
+    public int _numberSelectedAbility;
     private void Start()
     {
-        raycaster = FindObjectOfType<GraphicRaycaster>();
-        eventSystem = FindObjectOfType<EventSystem>();
+        _raycaster = FindObjectOfType<GraphicRaycaster>();
+        _eventSystem = FindObjectOfType<EventSystem>();
     }
     public void OnPointerDown(PointerEventData data)
     {
-        currentAbility = GameObject.Instantiate(gameObject,Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x + 35,Input.mousePosition.y + 35,10)),transform.rotation,FindObjectOfType<Canvas>().transform);
-        currentAbility.GetComponent<Image>().raycastTarget = false;
+        _currentAbility = GameObject.Instantiate(gameObject,Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x + 35,Input.mousePosition.y + 35,10)),transform.rotation,FindObjectOfType<Canvas>().transform);
+        _currentAbility.GetComponent<Image>().raycastTarget = false;
     }
     public void OnDrag(PointerEventData data)
     {
-        currentAbility.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x + 35,Input.mousePosition.y + 35,10));
-        Debug.Log(currentAbility.GetComponent<Image>().raycastTarget);
+        _currentAbility.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x + 35,Input.mousePosition.y + 35,10));
+        Debug.Log(_currentAbility.GetComponent<Image>().raycastTarget);
     }
     public void OnPointerUp(PointerEventData data)
     {   
-        pointerEventData = new PointerEventData(eventSystem);
-        pointerEventData.position = Input.mousePosition;
+        _pointerEventData = new PointerEventData(_eventSystem);
+        _pointerEventData.position = Input.mousePosition;
         List<RaycastResult> results = new List<RaycastResult>();
-        raycaster.Raycast(pointerEventData,results);
+        _raycaster.Raycast(_pointerEventData,results);
         GameObject abilityObject = results[1].gameObject;
         if(results.Count > 1 && abilityObject.CompareTag("ability"))
         {
             AbilitySelectUI abilitySelectUI = abilityObject.GetComponent<AbilitySelectUI>();
-            AbilitiesEnum abilitiesEnum1 = abilitySelectUI.abilityEnum;
-            abilitySelectUI.abilityEnum = abilityEnum;
-            abilityEnum = abilitiesEnum1;
+            AbilitiesEnum abilitiesEnum1 = abilitySelectUI._abilityEnum;
+            abilitySelectUI._abilityEnum = _abilityEnum;
+            _abilityEnum = abilitiesEnum1;
             Sprite sprite = abilityObject.transform.GetChild(0).GetComponent<Image>().sprite; 
             abilityObject.transform.GetChild(0).GetComponent<Image>().sprite = transform.GetChild(0).GetComponent<Image>().sprite;
             transform.GetChild(0).GetComponent<Image>().sprite = sprite;
-            GameManager.instance.user.seletedAbilities[abilitySelectUI.numberSelectedAbility] = ((int)abilitySelectUI.abilityEnum);
+            GameManager._instance._user._seletedAbilities[abilitySelectUI._numberSelectedAbility] = ((int)abilitySelectUI._abilityEnum);
         }
-        Destroy(currentAbility);
+        Destroy(_currentAbility);
     }
 }

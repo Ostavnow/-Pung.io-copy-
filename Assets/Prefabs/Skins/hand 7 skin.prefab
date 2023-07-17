@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 2b091535a6e5c49468839c2fed697ff2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c4018cc4525a93444aa413e4f9c73073, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 1
@@ -223,11 +223,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7bdbbd84ff0cd2458cdf347a5a220f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  direction: {x: 0, y: 0, z: 0, w: 0}
-  initialPosition: {x: 0, y: 0, z: 0}
-  isRightHand: 0
-  criticalDamageChance: 0
-  coinPrefab: {fileID: 941613297720161430, guid: c234650c7140fbb4e99034881dfe49d0, type: 3}
-  textPrefab: {fileID: 6578524299318882037, guid: 3a79bdec06cc0ba41939600b1bfd8977, type: 3}
-  flightDistance: 2.5
+  _damage: 0
+  _direction: {x: 0, y: 0, z: 0, w: 0}
+  _isRightHand: 0
+  _criticalDamageChance: 0
+  _coinPrefab: {fileID: 941613297720161430, guid: c234650c7140fbb4e99034881dfe49d0, type: 3}
+  _textPrefab: {fileID: 6578524299318882037, guid: 3a79bdec06cc0ba41939600b1bfd8977, type: 3}
+  _flightDistance: 2.5

@@ -5,40 +5,41 @@ using UnityEngine;
 public class Hand : MonoBehaviour
 {
     [HideInInspector]
-    public float damage;
+    public float _damage = 1f;
     [HideInInspector]
-    private float speed = 5;
+    private float _speed = 5f;
     [HideInInspector]
-    public Quaternion direction;
+    public Quaternion _direction;
     [HideInInspector]
-    public Vector3 initialPosition;
+    private Vector3 _initialPosition;
     [HideInInspector]
-    public bool isRightHand;
-    public int criticalDamageChance;
-    public Action BlowHand;
-    public Action killEnemy;
+    public bool _isRightHand;
+    public int _criticalDamageChance;
+    public Action _BlowHand;
+    public Action _killEnemy;
     [SerializeField]
-    private GameObject coinPrefab;
+    private GameObject _coinPrefab;
     [SerializeField]
-    private GameObject textPrefab;
-    private MainUIHandler mainUIHandler;
-    public float flightDistance = 2.5f;
+    private GameObject _textPrefab;
+    private MainUIHandler _mainUIHandler;
+    public float _flightDistance = 2.5f;
     private void Start() {
-        mainUIHandler = FindObjectOfType<MainUIHandler>();
+        _initialPosition = transform.position;
+        _mainUIHandler = FindObjectOfType<MainUIHandler>();
     }
     void Update()
     {
 
-        transform.position += transform.up * speed * Time.deltaTime;
-        if(isRightHand)
+        transform.position += transform.up * _speed * Time.deltaTime;
+        if(_isRightHand)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation,direction,speed * 3 * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation,_direction,_speed * 3 * Time.deltaTime);
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation,direction,speed * 3 * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation,_direction,_speed * 3 * Time.deltaTime);
         }
-        if(Vector3.Distance(initialPosition,transform.position) > flightDistance)
+        if(Vector3.Distance(_initialPosition,transform.position) > _flightDistance)
         {
             Destroy(gameObject);
         }
@@ -48,27 +49,24 @@ public class Hand : MonoBehaviour
         if(other.CompareTag("punching bag"))
         {
             int randomRangeCriticalDamage = UnityEngine.Random.Range(0,1010);
-            int randomRangeDamage = (int) UnityEngine.Random.Range(1f,damage);
+            int randomRangeDamage = (int) UnityEngine.Random.Range(1f,_damage);
             int randomValue = UnityEngine.Random.Range(0,100);
             if(randomRangeCriticalDamage <= 10)
             {
-                TMP_Text text = Instantiate(textPrefab,transform.position,Quaternion.identity,mainUIHandler.canvasTransform).GetComponent<TMP_Text>();
-                text.text = damage.ToString();
+                TMP_Text text = Instantiate(_textPrefab,transform.position,Quaternion.identity,_mainUIHandler._canvasTransform).GetComponent<TMP_Text>();
+                text.text = _damage.ToString();
                 text.color = new Color(1,1,0,1);
             }
             else
             {
-                Instantiate(textPrefab,transform.position,Quaternion.identity,mainUIHandler.canvasTransform).GetComponent<TMP_Text>().text = randomRangeDamage.ToString();
+                Instantiate(_textPrefab,transform.position,Quaternion.identity,_mainUIHandler._canvasTransform).GetComponent<TMP_Text>().text = randomRangeDamage.ToString();
             }
             if(randomValue < 1)
             {
-                GameManager.instance.user.amountMoney += 1;
-                mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
-                GameManager.instance.SaveUserProgress();
-                Instantiate(coinPrefab,transform.position,coinPrefab.transform.rotation);
+                Instantiate(_coinPrefab,transform.position,_coinPrefab.transform.rotation);
             }
-            BlowHand?.Invoke();
+            _BlowHand?.Invoke();
             Destroy(gameObject);
-        }        
+        }  
     }
 }

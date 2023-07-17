@@ -2129,8 +2129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3329b404f97da469992841ce4dfe0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityEnum: 0
-  numberSelectedAbility: 3
+  _abilityEnum: 0
+  _numberSelectedAbility: 0
 --- !u!1 &324937552
 GameObject:
   m_ObjectHideFlags: 0
@@ -3159,8 +3159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3329b404f97da469992841ce4dfe0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityEnum: 0
-  numberSelectedAbility: 1
+  _abilityEnum: 0
+  _numberSelectedAbility: 0
 --- !u!1 &527367954
 GameObject:
   m_ObjectHideFlags: 0
@@ -3386,8 +3386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3329b404f97da469992841ce4dfe0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityEnum: 0
-  numberSelectedAbility: 2
+  _abilityEnum: 0
+  _numberSelectedAbility: 0
 --- !u!1 &541055229
 GameObject:
   m_ObjectHideFlags: 0
@@ -4940,43 +4940,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed4f77be0180774ba99378bf55039bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skinUIElements: []
-  abilityUIElements: []
-  donateSlots: 000000001027000050c3000000000000400d030020a10700
-  healthStripe: {fileID: 0}
-  staminaStripe: {fileID: 0}
-  XPStripe: {fileID: 0}
-  firstAbilityImage: {fileID: 0}
-  secondAbilityImage: {fileID: 0}
-  thirdAbilityImage: {fileID: 0}
-  fourthAbilityImage: {fileID: 0}
-  textOfHealthStrip: {fileID: 0}
-  textOfStaminaStrip: {fileID: 0}
-  attackDamageText: {fileID: 0}
-  healthText: {fileID: 0}
-  staminaText: {fileID: 0}
-  criticalDamageText: {fileID: 0}
-  attackSpeedText: {fileID: 0}
-  multiplierAttackDamageImprovementText: {fileID: 0}
-  healthImprovementMultiplierText: {fileID: 0}
-  staminaImprovementMultiplierText: {fileID: 0}
-  criticalDamageImprovementMultiplierText: {fileID: 0}
-  attackSpeedImprovementMultiplierText: {fileID: 0}
-  numberImproventsText: {fileID: 0}
-  levelText: {fileID: 0}
-  comboText: {fileID: 0}
-  moneyCounterTextMenu: {fileID: 0}
-  moneyCounterTextGame: {fileID: 0}
-  loginPanel: {fileID: 0}
-  registerPanel: {fileID: 0}
-  skinCell: {fileID: 5601093511664353611, guid: e4ffa19631a11de45bc813b6db45ff3b, type: 3}
-  abilityCell: {fileID: 8968681115490173880, guid: f764d2fd43929474ca6538efa7d8869e, type: 3}
-  background: {fileID: 0}
-  canvasTransform: {fileID: 0}
-  firstAbilitySelected: {fileID: 0}
-  secondAbilitySelected: {fileID: 0}
-  thirdAbilitySelected: {fileID: 0}
-  fourthAbilitySelected: {fileID: 0}
+  _skinUIElements: []
+  _abilityUIElements: []
+  _donateSlots: 000000001027000050c3000000000000400d030020a10700
+  _healthStripe: {fileID: 0}
+  _staminaStripe: {fileID: 0}
+  _XPStripe: {fileID: 0}
+  _firstAbilityImage: {fileID: 0}
+  _secondAbilityImage: {fileID: 0}
+  _thirdAbilityImage: {fileID: 0}
+  _fourthAbilityImage: {fileID: 0}
+  _textOfHealthStrip: {fileID: 0}
+  _textOfStaminaStrip: {fileID: 0}
+  _attackDamageText: {fileID: 0}
+  _healthText: {fileID: 0}
+  _staminaText: {fileID: 0}
+  _criticalDamageText: {fileID: 0}
+  _attackSpeedText: {fileID: 0}
+  _multiplierAttackDamageImprovementText: {fileID: 0}
+  _healthImprovementMultiplierText: {fileID: 0}
+  _staminaImprovementMultiplierText: {fileID: 0}
+  _criticalDamageImprovementMultiplierText: {fileID: 0}
+  _attackSpeedImprovementMultiplierText: {fileID: 0}
+  _numberImproventsText: {fileID: 0}
+  _levelText: {fileID: 0}
+  _comboText: {fileID: 0}
+  _moneyCounterTextMenu: {fileID: 0}
+  _moneyCounterTextGame: {fileID: 0}
+  _skilsPanel: {fileID: 0}
+  _comboGameObject: {fileID: 0}
+  _skinCell: {fileID: 5601093511664353611, guid: e4ffa19631a11de45bc813b6db45ff3b, type: 3}
+  _abilityCell: {fileID: 8968681115490173880, guid: f764d2fd43929474ca6538efa7d8869e, type: 3}
+  _background: {fileID: 0}
+  _canvasTransform: {fileID: 0}
+  _firstAbilitySelected: {fileID: 0}
+  _secondAbilitySelected: {fileID: 0}
+  _thirdAbilitySelected: {fileID: 0}
+  _fourthAbilitySelected: {fileID: 0}
 --- !u!4 &772487480
 Transform:
   m_ObjectHideFlags: 0
@@ -5004,8 +5004,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf37acc2da5b9c4ab0f906914b08c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilities: []
-  prefabAbilityCell: {fileID: 0}
+  _abilities: []
+  _prefabAbilityCell: {fileID: 0}
 --- !u!1 &779218557
 GameObject:
   m_ObjectHideFlags: 0
@@ -8380,7 +8380,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 45f39e5a0656fc3478d7fe063b334e3f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0529ff48e8a2dd74da88926bd1550870, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9628,26 +9628,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7e9fddc9363a24d93e02ca849ba02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  user:
-    id: 0
-    userName: 
-    email: 
-    password: 
-    amountMoney: 0
-    purchasedSkins: 
-    purchasedAbilities: 
-    seletedAbilities: 00000000000000000000000000000000
-    numberSelectedSkin: 0
-  skin:
-    attackDamage: 1
-    health: 1
-    stamina: 1
-    criticalDamage: 1
-    attackSpeed: 1
-    protection: 1
-    price: 100
-    spriteSkinBody: {fileID: 0}
-    spriteSkinHand: {fileID: 0}
+  _user:
+    _id: 0
+    _userName: 
+    _email: 
+    _password: 
+    _amountMoney: 0
+    _purchasedSkins: 000000000100000002000000
+    _purchasedAbilities: 00000000010000000200000003000000
+    _seletedAbilities: 00000000010000000200000003000000
+    _numberSelectedSkin: 0
+  _skin:
+    _attackDamage: 1
+    _health: 1
+    _stamina: 1
+    _criticalDamage: 1
+    _attackSpeed: 1
+    _protection: 1
+    _price: 100
+    _spriteSkinBody: {fileID: 0}
+    _spriteSkinHand: {fileID: 0}
 --- !u!4 &1540498606
 Transform:
   m_ObjectHideFlags: 0
@@ -9941,8 +9941,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3329b404f97da469992841ce4dfe0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityEnum: 0
-  numberSelectedAbility: 0
+  _abilityEnum: 0
+  _numberSelectedAbility: 0
 --- !u!1 &1636638817
 GameObject:
   m_ObjectHideFlags: 0

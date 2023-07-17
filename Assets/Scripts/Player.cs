@@ -1,330 +1,227 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 
-public class Player : MonoBehaviour, IPlayerData
+public abstract class Player : MonoBehaviour, IPlayerInfo
 {
-    public string nickname;
-    private float p_health = 200f;
-    protected float health
+    public string _nickname;
+    protected float _health = 200f;
+    public PlayerUIHundler _playerUIHundler;
+    protected float Health
     {
-        get{return p_health;}
+        get{return _health;}
         set
         {
-            p_health = value;
-            HealthStripeUpdate();
-            if(p_health < fullHealth & !(isHealthRegenerationRunning))
+            _health = value;
+            if(_health < FullHealth & !(_isHealthRegenerationRunning))
             {
-                coroutineHealthHundler = StartCoroutine(RegenerationHealth());
+                _coroutineHealthHundler = StartCoroutine(RegenerationHealth());
             }
         }
     }
 
-    private float p_stamina = 100f;
-    public float stamina
+    private float _stamina = 100f;
+    public float Stamina
     {
-        get{return p_stamina;}
+        get{return _stamina;}
         set
         {
-            p_stamina = value;
-            StaminaStripeUpdate();
-            if(p_stamina < fullStamina & !(isStaminaRegenerationRunning))
+            _stamina = value;
+            if(_stamina < FullStamina & !(_isStaminaRegenerationRunning))
             {
-                coroutineStaminaHundler = StartCoroutine(RegenerationStamina());
+                _coroutineStaminaHundler = StartCoroutine(RegenerationStamina());
             }
         }
     }
     public int money;
-    private int p_level;
-    public int level
+    [SerializeField]
+    private int _level;
+    protected int Level
     {
-        get{return p_level;}
+        get{return _level;}
         set
-        {
-            p_level = value;
-            mainUIHandler.levelText.text = p_level.ToString();
+        { 
+            _level = value;
+            _playerUIHundler.LevelTextSet(_level);
         }
     }
-    protected float XPPercent;
-    private float p_attackDamage = 1;
-    public float attackDamage
+    protected float _XPPercent;
+    private float _attackDamage = 1;
+    public float AttackDamage
     {
-        get{return p_attackDamage;}
+        get{return _attackDamage;}
         set
         {
-            p_attackDamage = value;
-            System.Math.Round(p_attackDamage,1);
-            if(p_attackDamage == ((int)p_attackDamage))
-            {
-                mainUIHandler.attackDamageText.text = p_attackDamage.ToString() + ".0";
-            }
-            else
-            {
-                p_attackDamage *= 10;
-                p_attackDamage = (int)p_attackDamage;
-                p_attackDamage = p_attackDamage / 10;
-                mainUIHandler.attackDamageText.text = p_attackDamage.ToString();  
-            }
+            _attackDamage = value;
+            System.Math.Round(_attackDamage,1);
+            _playerUIHundler.AttackDamageTextSet(_attackDamage);
         }
     }
-    private float p_criticalDamage = 1;
-    public float criticalDamage
+    private float _criticalDamage = 1;
+    public float CriticalDamage
     {
-        get{return p_criticalDamage;}
+        get{return _criticalDamage;}
         set
         {
-            System.Math.Round(p_criticalDamage,1);
-            p_criticalDamage = value;
-            if(p_criticalDamage == ((int)p_criticalDamage))
-            {
-                mainUIHandler.criticalDamageText.text = p_criticalDamage.ToString() + ".0";
-            }
-            else
-            {
-                mainUIHandler.criticalDamageText.text = p_criticalDamage.ToString();  
-            }
+            System.Math.Round(_criticalDamage,1);
+            _criticalDamage = value;
+            _playerUIHundler.CriticalDamageTextSet(_criticalDamage);
         }
     }
-    private float p_attackSpeed = 1;
-    public float attackSpeed
+    private float _attackSpeed = 1;
+    public float AttackSpeed
     {
-        get{return p_attackSpeed;}
+        get{return _attackSpeed;}
         set
         {
-            p_attackSpeed = value;
-            System.Math.Round(p_attackSpeed,1);
-            if(p_attackSpeed == ((int)p_attackSpeed))
-            {
-                mainUIHandler.attackSpeedText.text = p_attackSpeed.ToString() + ".0";
-            }
-            else
-            {
-                mainUIHandler.attackSpeedText.text = p_attackSpeed.ToString();  
-            }
+            _attackSpeed = value;
+            System.Math.Round(_attackSpeed,1);
+            _playerUIHundler.AttackSpeedTextSet(_attackSpeed);
         }
     }
-    private float p_fullHealth = 200f;
-    protected float updateFullHealth;
-    public float fullHealth
+    private float _fullHealth = 200f;
+    public float _updateFullHealth;
+    public float FullHealth
     {
-        get{return p_fullHealth;}
+        get{return _fullHealth;}
         set
         {
-            updateFullHealth += value - p_fullHealth;
-            p_fullHealth = value;
-            System.Math.Round(p_fullHealth,1);
-            System.Math.Round(updateFullHealth,1);
-            HealthStripeUpdate();
-            health = health;
-            if(updateFullHealth == ((int)updateFullHealth))
-            {
-                mainUIHandler.healthText.text = updateFullHealth.ToString() + ".0";
-            }
-            else
-            {
-                mainUIHandler.healthText.text = updateFullHealth.ToString();  
-            }
+            _updateFullHealth += (float)System.Math.Round(value - _fullHealth,1);
+            _fullHealth = value;
+            Health = Health;
+            _playerUIHundler.HealthTextSet(Health);
         }
     }      
-    private float p_fullStamina = 100f;
-    protected float updateFullStamina;
-    public float fullStamina
+    private float _fullStamina = 100f;
+    protected float _updateFullStamina;
+    public float FullStamina
     {
-        get{return p_fullStamina;}
+        get{return _fullStamina;}
         set
         {
-            updateFullStamina += value - p_fullStamina;
-            System.Math.Round(p_fullStamina,1);
-            System.Math.Round(updateFullStamina,1);
-            StaminaStripeUpdate();
-            p_fullStamina = value;
-            stamina = stamina;
-            if(updateFullStamina == ((int)updateFullStamina))
+            _updateFullStamina += (float)System.Math.Round(value - _fullStamina,1);
+            _fullStamina = value;
+            Stamina = Stamina;
+            _playerUIHundler.StaminaTextSet(Stamina);
+        }
+    }
+    public float _multiplierAttackDamageImprovement = 1f;
+    public float _healthImprovementMultiplier = 1f;
+    public float _staminaImprovementMultiplier = 1f;
+    public float _criticalDamageImprovementMultiplier = 1f;
+    public float _attackSpeedImprovementMultiplier = 1f;
+    public float _experienceImprovementMultiplier = 1f;
+    protected float _nextLevel = 100f;
+    private int _numberImprovents = 20;
+    public int NumberImprovents
+    {
+        get{return _numberImprovents;}
+        set
+        {
+            _numberImprovents = value;
+            _playerUIHundler.NumberImproventsTextSet(_numberImprovents);
+            if(_numberImprovents > 0)
             {
-                mainUIHandler.staminaText.text = updateFullStamina.ToString() + ".0";
+                _playerUIHundler.SkilsPanelSetActive(true);
             }
             else
             {
-                mainUIHandler.staminaText.text = updateFullStamina.ToString();  
+                _playerUIHundler.SkilsPanelSetActive(false);
             }
         }
     }
-    public float multiplierAttackDamageImprovement = 1f;
-    public float healthImprovementMultiplier = 1f;
-    public float staminaImprovementMultiplier = 1f;
-    public float criticalDamageImprovementMultiplier = 1f;
-    public float attackSpeedImprovementMultiplier = 1f;
-    protected float nextLevel = 100f;
-    private float p_numberImprovents = 20f;
-    public float experienceImprovementMultiplier = 1f;
-    public float numberImprovents
+    protected bool _isStaminaRegenerationRunning;
+    protected bool _isHealthRegenerationRunning;
+    public bool _isCorutinaComboRunning;
+    public Coroutine _coroutineStaminaHundler;
+    public Coroutine _coroutineHealthHundler;
+    public Coroutine _coroutineComboHundler;
+    private int _comboValue;
+    public int ComboValue
     {
-        get{return p_numberImprovents;}
+        get{return _comboValue;}
         set
         {
-            p_numberImprovents = value;
-            mainUIHandler.numberImproventsText.text = p_numberImprovents.ToString();
-            if(numberImprovents > 0)
-            {
-                skilsPanel.SetActive(true);
-            }
-            else
-            {
-                skilsPanel.SetActive(false);
-            }
-        }
-    }
-    protected bool isStaminaRegenerationRunning;
-    protected bool isHealthRegenerationRunning;
-    protected bool isCorutinaComboRunning;
-    public Coroutine coroutineStaminaHundler;
-    public Coroutine coroutineHealthHundler;
-    public Coroutine coroutineComboHundler;
-    private GameObject skilsPanel;
-    private GameObject comboGameObject;
-    private int p_comboValue;
-    private MainUIHandler mainUIHandler;
-    private int comboValue
-    {
-        get{return p_comboValue;}
-        set
-        {
-            p_comboValue = value;
-            if(p_comboValue != 0)
-            {
-                if(!(isCorutinaComboRunning))
+            _comboValue = value;
+                if(_comboValue != 0)
                 {
-                   coroutineComboHundler = StartCoroutine(Combo());
+                    if(!(_isCorutinaComboRunning))
+                    {
+                        _coroutineComboHundler = StartCoroutine(_playerUIHundler.ComboUIUpdate(this));
+                    }
+                    else
+                    {
+                        StopCoroutine(_coroutineComboHundler);
+                        _coroutineComboHundler = StartCoroutine(_playerUIHundler.ComboUIUpdate(this));
+                    }
                 }
                 else
                 {
-                    StopCoroutine(coroutineComboHundler);
-                    coroutineComboHundler = StartCoroutine(Combo());
+                    _playerUIHundler.ComboTextSetActive(false);
                 }
-            }
-            else
-            {
-                comboGameObject.SetActive(false);
-            }
         }
     }
     private Animator comboAnimator;
-    void Start()
+    private void Start()
     {
-        mainUIHandler = FindObjectOfType<MainUIHandler>();
-        skilsPanel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
-        comboGameObject = GameObject.Find("Canvas").transform.GetChild(10).gameObject;
-        comboAnimator = comboGameObject.GetComponent<Animator>();
-        mainUIHandler.moneyCounterTextGame.text = GameManager.instance.user.amountMoney.ToString();
-        PlayerController playerController = GetComponent<PlayerController>();
-        Skin skin = GameManager.DeserializeSkin(GameManager.instance.user.numberSelectedSkin);
-        GetComponent<SpriteRenderer>().sprite = skin.spriteSkinBody;
-        playerController.hand.GetComponent<SpriteRenderer>().sprite = skin.spriteSkinHand;
-        multiplierAttackDamageImprovement = skin.attackDamage;
-        healthImprovementMultiplier = skin.health;
-        staminaImprovementMultiplier = skin.stamina;
-        criticalDamageImprovementMultiplier = skin.criticalDamage;
-        attackSpeedImprovementMultiplier = skin.attackSpeed;
-        mainUIHandler.multiplierAttackDamageImprovementText.text = attackSpeedImprovementMultiplier.ToString();
-        mainUIHandler.healthImprovementMultiplierText.text = healthImprovementMultiplier.ToString();
-        mainUIHandler.staminaImprovementMultiplierText.text = staminaImprovementMultiplier.ToString();
-        mainUIHandler.criticalDamageImprovementMultiplierText.text = criticalDamageImprovementMultiplier.ToString();
-        mainUIHandler.attackSpeedImprovementMultiplierText.text = attackSpeedImprovementMultiplier.ToString();
+        _playerUIHundler = GetComponent<PlayerUIHundler>();
     }
-    void Update()
-    {
-        
-    }
-    public void BlowHit()
-    {
-        comboValue++;
-        Level();
-    }
+    public abstract void BlowHit();
+    public abstract void KillEnemy();
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Hand"))
         {
-            Hand hand = GetComponent<Hand>();
-            health -= hand.damage;
-            if(health <= 0)
+            Hand hand = other.GetComponent<Hand>();
+            Health -= hand._damage;
+            Destroy(hand.gameObject);
+            StopCoroutine(_coroutineHealthHundler);
+            _coroutineHealthHundler = StartCoroutine(RegenerationHealth());
+            if(Health <= 0)
             {
-                hand.killEnemy?.Invoke();
+                hand._killEnemy?.Invoke();
+                Destroy(gameObject);
             }
         }
-        else if(other.CompareTag("Test"))
+    }
+    public void AddingExperience()
+    {
+        _XPPercent += _experienceImprovementMultiplier * (100 / (_nextLevel / 100));
+        _playerUIHundler.XPStripeFillAmount(_XPPercent / 100);
+        if(_XPPercent >= 100)
         {
-            comboValue = 0;
-            health -= 10;
-            StopCoroutine(coroutineHealthHundler);
-            coroutineHealthHundler = StartCoroutine(RegenerationHealth());
+            _level++;
+            NumberImprovents++;
+            _XPPercent = 0;
+            _nextLevel += 500;
         }
     }
-    public void Level()
-    {
-        XPPercent += experienceImprovementMultiplier * (100 / (nextLevel / 100));
-        mainUIHandler.XPStripe.fillAmount = XPPercent / 100;
-        if(XPPercent >= 100)
-        {
-            level++;
-            numberImprovents++;
-            XPPercent = 0;
-            nextLevel += 500;
-        }
-    }
-    public void KillEnemy()
-    {
-        // Debug.Log("Мы убили игрока");
-    }
+    
     protected IEnumerator RegenerationHealth()
     {
-        isHealthRegenerationRunning = true;
-        mainUIHandler.healthStripe.fillAmount = health / fullHealth;
+        _isHealthRegenerationRunning = true;
+        _playerUIHundler.HealthStripeUpdate(Health,FullHealth);
         yield return new WaitForSeconds(3);
-        while(health < fullHealth)
+        while(Health < FullHealth)
         {
-            health += (fullHealth / 10f / 5f) * Time.deltaTime;
-            mainUIHandler.textOfHealthStrip.text = "HP" + ((int)health).ToString() + "/" + fullHealth;
-            mainUIHandler.healthStripe.fillAmount = health / fullHealth;
+            Health += (FullHealth / 10f / 5f) * Time.deltaTime;
+                _playerUIHundler.HealthStripeUpdate(Health,FullHealth);
             yield return null;
         }
-        isHealthRegenerationRunning = false;
+        _isHealthRegenerationRunning = false;
     }
     public IEnumerator RegenerationStamina()
     {
-        isStaminaRegenerationRunning = true;
+        _isStaminaRegenerationRunning = true;
+        _playerUIHundler.StaminaStripeUpdate(Stamina,FullStamina);
         yield return new WaitForSeconds(3);
-        while(stamina < fullStamina)
+        while(Stamina < FullStamina)
         {
-            stamina += (fullStamina / 5f) * Time.deltaTime;
-            mainUIHandler.textOfStaminaStrip.text = "STM" + ((int)stamina).ToString() + "/" + fullStamina;
-            mainUIHandler.staminaStripe.fillAmount = stamina / fullStamina;
+            Stamina += (FullStamina / 5f) * Time.deltaTime;
+            _playerUIHundler.StaminaStripeUpdate(Stamina,FullStamina);
             yield return null;
         }
-        isStaminaRegenerationRunning = false;
+        _isStaminaRegenerationRunning = false;
     }
-    public IEnumerator Combo()
-    {
-        isCorutinaComboRunning = true;
-        mainUIHandler.comboText.text = "x" + comboValue.ToString();
-        comboAnimator.Play("Combo");
-        comboAnimator.SetTrigger("Combo");
-        comboGameObject.SetActive(true);
-        yield return new WaitForSeconds(5f);
-        comboGameObject.SetActive(false);
-        isCorutinaComboRunning = false;
-    }
-    private void HealthStripeUpdate()
-    {
-        mainUIHandler.textOfHealthStrip.text = "HP" + ((int)health).ToString() + "/" + fullHealth;
-        mainUIHandler.healthStripe.fillAmount = health / fullHealth;
-    }
-    private void StaminaStripeUpdate()
-    {
-        mainUIHandler.textOfStaminaStrip.text = "STM" + ((int)stamina).ToString() + "/" + fullStamina;
-        mainUIHandler.staminaStripe.fillAmount = stamina / fullStamina;
-    }
-    public float GetPowerScore() => level * healthImprovementMultiplier * staminaImprovementMultiplier * attackSpeedImprovementMultiplier
-                                    * criticalDamageImprovementMultiplier * multiplierAttackDamageImprovement;
+    public float GetPowerScore() => _level * _healthImprovementMultiplier * _staminaImprovementMultiplier * _attackSpeedImprovementMultiplier
+                                    * _criticalDamageImprovementMultiplier * _multiplierAttackDamageImprovement;
 }

@@ -6,6 +6,6 @@ using UnityEngine;
 public class Skins : MonoBehaviour
 {
     [SerializeField]
-    public List<Skin> skins = new List<Skin>();
-    public GameObject prefabSkinCell;
+    public List<Skin> _skins = new List<Skin>();
+    public GameObject _prefabSkinCell;
 }

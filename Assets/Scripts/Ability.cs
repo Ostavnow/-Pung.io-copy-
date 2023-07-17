@@ -5,7 +5,7 @@ using System;
 [Serializable]
 public class Ability
 {
-    public Sprite spriteAbility;
-    public int price;
-    public AbilitiesEnum abilityType;
+    public Sprite _spriteAbility;
+    public int _price;
+    public AbilitiesEnum _abilityType;
 }

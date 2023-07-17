@@ -3,88 +3,51 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private MainUIHandler mainUIHandler;
-    private Joystick motionJoystick;
-    private Joystick attackJoystick;
-    private Rigidbody2D rb;
-    private CircleCollider2D circleCollider2D;
-    private Vector2 moveInput;
+    protected Rigidbody2D rb;
+    protected CircleCollider2D circleCollider2D;
+    protected Vector2 moveInput;
     [HideInInspector]
     public float speed = 5f;
     private float rotZ;
     [SerializeField]
     public GameObject hand;
     public GameObject shield;
+    [HideInInspector]
     public Transform handRightPoint;
+    [HideInInspector]
     public Transform handLeftPoint;
     [HideInInspector]
     public Player player;
+    protected PlayerUIHundler playerUIHundler;
     private bool isWillNextBlowBeRightSide;
-    private bool isWillNextBlowBeRightSide1;
-    [SerializeField]
-    public float timeAfterWhichBeNextBlow = 0.5f;
     private const float timeAfterWhichBeNextBlowConst = 0.5f;
-    private float time;
-    private float timeFourarms;
-    private float attackSpeed = 1;
+    public float timeAfterWhichBeNextBlow = timeAfterWhichBeNextBlowConst;
+    [HideInInspector]
     public bool isActivePunchSwarm;
+    [HideInInspector]
     public bool isActiveDash;
-    private GameManager gameManager;
     public float flightDistance = 2.5f;
     private bool isFirstAbilityRecovered = true;
     private bool isSecondAbilityRecovered = true;
     private bool isThirdAbilityRecovered = true;
     private bool isFourthAbilityRecovered = true;
+    protected Timer timer;
     void Start()
     {
-        motionJoystick = GameObject.Find("Canvas").transform.GetChild(0).GetComponent<Joystick>();
-        attackJoystick = GameObject.Find("Canvas").transform.GetChild(1).GetComponent<Joystick>();
         handRightPoint = transform.GetChild(0);
         handLeftPoint = transform.GetChild(1);
         circleCollider2D = GetComponent<CircleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         player = GetComponent<Player>();
-        gameManager = FindObjectOfType<GameManager>();
-        mainUIHandler = FindObjectOfType<MainUIHandler>();
+        playerUIHundler = player._playerUIHundler;
+        timer = GetComponent<Timer>();
     }
 
-    void Update()
+    public void Hit()
     {
-        moveInput = new Vector2(motionJoystick.Horizontal,motionJoystick.Vertical);
-        if(time >= 0)
+        if(timer.time <= 0)
         {
-            time -= Time.deltaTime;
-        }
-        if(Mathf.Abs(attackJoystick.Horizontal) != 0f || Mathf.Abs(attackJoystick.Vertical) != 0f)
-        {
-            speed = 1;
-            rotZ = Mathf.Atan2(attackJoystick.Vertical,attackJoystick.Horizontal) * Mathf.Rad2Deg - 90;
-            if(time <= 0 && (Mathf.Abs(attackJoystick.Horizontal) > 0.7f | Mathf.Abs(attackJoystick.Vertical) > 0.7f) & !(player.stamina <= 0))
-            {
-                Hit();
-            }
-        }
-        else
-        {
-            if(!isActiveDash)
-            {
-                speed = 5;
-            }
-        }
-        if(Mathf.Abs(moveInput.x) > 0 | Mathf.Abs(moveInput.y) > 0)
-        {
-            rotZ = Mathf.Atan2(motionJoystick.Vertical,motionJoystick.Horizontal) * Mathf.Rad2Deg - 90;
-            if(Mathf.Abs(attackJoystick.Horizontal) != 0f || Mathf.Abs(attackJoystick.Vertical) != 0f)
-            {
-                rotZ = Mathf.Atan2(attackJoystick.Vertical,attackJoystick.Horizontal) * Mathf.Rad2Deg - 90;
-            }
-        }
-        transform.rotation = Quaternion.Euler(0,0,rotZ);
-    }
-
-    private void Hit()
-    {
-        time = timeAfterWhichBeNextBlow;
+        timer.time = timeAfterWhichBeNextBlow;
         if(isActivePunchSwarm)
         {
             PunchSwarm();
@@ -93,34 +56,35 @@ public class PlayerController : MonoBehaviour
         {
             UsualHit();
         }
-    StopCoroutine(player.coroutineStaminaHundler);
-    player.coroutineStaminaHundler = StartCoroutine(player.RegenerationStamina());
+            StopCoroutine(player._coroutineStaminaHundler);
+            player._coroutineStaminaHundler = StartCoroutine(player.RegenerationStamina());
+        }
+        
     }
-    public void HandCreate(Vector3 randomPosition,float impactSpreat,ref bool isWillNextBlowBeRightSide)
+    public void HandCreate(Vector3 randomPosition,ref bool isWillNextBlowBeRightSide)
     {
         GameObject currentHandGameObject;
         Hand currentHand;
-        player.stamina--;
+        player.Stamina--;
         Quaternion direction;
         if(isWillNextBlowBeRightSide)
         {
             currentHandGameObject = Instantiate(hand,randomPosition,Quaternion.Euler(0f,0f,transform.eulerAngles.z - 20 - Random.Range(0,30)));
-            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z + Random.Range(5f,impactSpreat)));
+            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z + Random.Range(5f,20)));
         }
         else
         {
             currentHandGameObject = Instantiate(hand,randomPosition,Quaternion.Euler(0f,0f,transform.eulerAngles.z + 20 + Random.Range(0,30)));
-            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z - Random.Range(5f,impactSpreat)));
+            direction = Quaternion.Euler(new Vector3(0f,0f,transform.eulerAngles.z - Random.Range(5f,20)));
         }
         currentHand = currentHandGameObject.GetComponent<Hand>();
-        currentHand.isRightHand = isWillNextBlowBeRightSide;
-        currentHand.direction = direction;
+        currentHand._isRightHand = isWillNextBlowBeRightSide;
+        currentHand._direction = direction;
         isWillNextBlowBeRightSide = !isWillNextBlowBeRightSide;
-        currentHand.BlowHand += player.BlowHit;
-        currentHand.killEnemy += player.KillEnemy;
-        currentHand.damage = player.attackDamage;
-        currentHand.initialPosition = randomPosition;
-        currentHand.flightDistance = flightDistance;
+        currentHand._BlowHand += player.BlowHit;
+        currentHand._killEnemy += player.KillEnemy;
+        currentHand._damage = player.AttackDamage;
+        currentHand._flightDistance = flightDistance;
     }
     private void UsualHit()
     {
@@ -130,12 +94,12 @@ public class PlayerController : MonoBehaviour
             if(isWillNextBlowBeRightSide)
             {
                 randomPosition = new Vector3(handRightPoint.position.x + randomValue.x,handRightPoint.position.y + randomValue.y,0);
-                HandCreate(randomPosition,20,ref isWillNextBlowBeRightSide);
+                HandCreate(randomPosition,ref isWillNextBlowBeRightSide);
             }
             else
             {
                 randomPosition = new Vector3(handLeftPoint.position.x + randomValue.x,handLeftPoint.position.y + randomValue.y,0);
-                HandCreate(randomPosition,20,ref isWillNextBlowBeRightSide);
+                HandCreate(randomPosition,ref isWillNextBlowBeRightSide);
             }
     }
     private void PunchSwarm()
@@ -148,7 +112,7 @@ public class PlayerController : MonoBehaviour
             for(int i = 0;i < 3;i++)
             {
                 randomPosition = new Vector3(handRightPoint.position.x + randomValue.x,handRightPoint.position.y + randomValue.y,0);
-                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),10,ref isWillNextBlowBeRightSide);
+                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),ref isWillNextBlowBeRightSide);
             }
         }
         else
@@ -156,49 +120,49 @@ public class PlayerController : MonoBehaviour
             for(int i = 0;i < 3;i++)
             {
                 randomPosition = new Vector3(handLeftPoint.position.x + randomValue.x,handLeftPoint.position.y + randomValue.y,0);
-                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),10,ref isWillNextBlowBeRightSide);
+                HandCreate(new Vector3(Random.Range(randomPosition.x - 1,randomPosition.x + 1),Random.Range(randomPosition.y - 1,randomPosition.y + 1),0),ref isWillNextBlowBeRightSide);
             }
         }
     }
     public void ImproveAttackDamage()
     {
-        if(player.numberImprovents > 0)
+        if(player.NumberImprovents > 0)
         {
-            player.numberImprovents--;
-            player.attackDamage += player.multiplierAttackDamageImprovement * 1;
+            player.NumberImprovents--;
+            player.AttackDamage += (float)System.Math.Round(player._multiplierAttackDamageImprovement * 1,1);
         }
     }
     public void ImproveHealth()
     {
-        if(player.numberImprovents > 0)
+        if(player.NumberImprovents > 0)
         {
-        player.numberImprovents--;
-        player.fullHealth += player.healthImprovementMultiplier * 1;
+        player.NumberImprovents--;
+        player.FullHealth += (float)System.Math.Round(player._healthImprovementMultiplier * 1,1);
         }
     }
     public void ImproveStamina()
     {
-        if(player.numberImprovents > 0)
+        if(player.NumberImprovents > 0)
         {
-        player.numberImprovents--;
-        player.fullStamina += player.staminaImprovementMultiplier * 1;
+        player.NumberImprovents--;
+        player.FullStamina += (float)System.Math.Round(player._staminaImprovementMultiplier * 1,1);
         }
     }
     public void ImproveCriticalDamage()
     { 
-        if(player.numberImprovents > 0)
+        if(player.NumberImprovents > 0)
         {
-        player.numberImprovents--;
-        player.criticalDamage += player.criticalDamageImprovementMultiplier * 1;
+        player.NumberImprovents--;
+        player.CriticalDamage += (float)System.Math.Round(player._criticalDamageImprovementMultiplier * 1,1);
         }
     }
     public void ImproveAttackSpeed()
     {
-        if(player.numberImprovents > 0 & player.attackSpeed < 350)
+        if(player.NumberImprovents > 0 & player.AttackSpeed < 350)
         {
-        player.numberImprovents--;
-        player.attackSpeed += player.attackSpeedImprovementMultiplier * 1;
-        timeAfterWhichBeNextBlow = timeAfterWhichBeNextBlowConst / Mathf.Pow(1.00915f,player.attackSpeed);
+        player.NumberImprovents--;
+        player.AttackSpeed += (float)System.Math.Round(player._attackSpeedImprovementMultiplier * 1);
+        timeAfterWhichBeNextBlow = timeAfterWhichBeNextBlowConst / Mathf.Pow(1.00915f,player.AttackSpeed);
         if(timeAfterWhichBeNextBlow < 0.02f)
         {
             timeAfterWhichBeNextBlow = 0.02f;
@@ -207,7 +171,7 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator FirstAbilityCoroutine()
     {
-        Abilities.Closures closures = GameManager.instance.firstAbilityDelegate?.Invoke(this,true);
+        Abilities.Closures closures = GameManager._instance._firstAbilityDelegate?.Invoke(this,true);
         float[] numbers = closures?.Invoke();
         isFirstAbilityRecovered = false;
         float timeActive = numbers[0];
@@ -218,7 +182,7 @@ public class PlayerController : MonoBehaviour
             closures?.Invoke();
             yield return null;
         }
-        GameManager.instance.firstAbilityDelegate?.Invoke(this,false)?.Invoke();
+        GameManager._instance._firstAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringFirstAbilityCorutine(float recoveryTime)
     {
@@ -227,14 +191,14 @@ public class PlayerController : MonoBehaviour
         while(time < recoveryTime)
         {
             time += Time.deltaTime;
-            mainUIHandler.firstAbilityImage.fillAmount = (time / recoveryTime);
+            playerUIHundler.FirstAbilityImageFillAmount(time / recoveryTime);
             yield return null;
         }
         isFirstAbilityRecovered = true;
     }
     private IEnumerator SecondAbilityCoroutine()
     {
-        Abilities.Closures closures = GameManager.instance.secondAbilityDelegate?.Invoke(this,true);
+        Abilities.Closures closures = GameManager._instance._secondAbilityDelegate?.Invoke(this,true);
         float[] numbers = closures?.Invoke();
         isFirstAbilityRecovered = false;
         float timeActive = numbers[0];
@@ -245,7 +209,7 @@ public class PlayerController : MonoBehaviour
             closures?.Invoke();
             yield return null;
         }
-        GameManager.instance.secondAbilityDelegate?.Invoke(this,false)?.Invoke();
+        GameManager._instance._secondAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringSecondAbilityCorutine(float recoveryTime)
     {
@@ -254,14 +218,14 @@ public class PlayerController : MonoBehaviour
         while(time < recoveryTime)
         {
             time += Time.deltaTime;
-            mainUIHandler.secondAbilityImage.fillAmount = (time / recoveryTime);
+            playerUIHundler.SecondAbilityImageFillAmount(time / recoveryTime);
             yield return null;
         }
         isSecondAbilityRecovered = true;
     }
     private IEnumerator ThirdAbilityCoroutine()
     {
-        Abilities.Closures closures = GameManager.instance.thirdAbilityDelegate?.Invoke(this,true);
+        Abilities.Closures closures = GameManager._instance._thirdAbilityDelegate?.Invoke(this,true);
         float[] numbers = closures?.Invoke();
         isFirstAbilityRecovered = false;
         float timeActive = numbers[0];
@@ -272,7 +236,7 @@ public class PlayerController : MonoBehaviour
             closures?.Invoke();
             yield return null;
         }
-        GameManager.instance.thirdAbilityDelegate?.Invoke(this,false)?.Invoke();
+        GameManager._instance._thirdAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringThirdAbilityCorutine(float recoveryTime)
     {
@@ -281,14 +245,14 @@ public class PlayerController : MonoBehaviour
         while(time < recoveryTime)
         {
             time += Time.deltaTime;
-            mainUIHandler.thirdAbilityImage.fillAmount = (time / recoveryTime);
+            playerUIHundler.ThirdAbilityImageFillAmount(time / recoveryTime);
             yield return null;
         }
         isThirdAbilityRecovered = true;
     }
     private IEnumerator FourthAbilityCoroutine()
     {
-        Abilities.Closures closures = GameManager.instance.fourthAbilityDelegate?.Invoke(this,true);
+        Abilities.Closures closures = GameManager._instance._fourthAbilityDelegate?.Invoke(this,true);
         float[] numbers = closures?.Invoke();
         isFirstAbilityRecovered = false;
         float timeActive = numbers[0];
@@ -300,7 +264,7 @@ public class PlayerController : MonoBehaviour
             closures?.Invoke();
             yield return null;
         }
-        GameManager.instance.fourthAbilityDelegate?.Invoke(this,false)?.Invoke();
+        GameManager._instance._fourthAbilityDelegate?.Invoke(this,false)?.Invoke();
     }
     private IEnumerator RestoringFourthAbilityCorutine(float recoveryTime)
     {
@@ -309,7 +273,7 @@ public class PlayerController : MonoBehaviour
         while(time < recoveryTime)
         {
             time += Time.deltaTime;
-            mainUIHandler.fourthAbilityImage.fillAmount = (time / recoveryTime);
+            playerUIHundler.FourthAbilityImageFillAmount(time / recoveryTime);
             yield return null;
         }
         isFourthAbilityRecovered = true;

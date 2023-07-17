@@ -8,109 +8,104 @@ using System.IO;
 [CustomEditor(typeof(Abilities))]
 public class AbilityEditor : Editor
 {
-    private ReorderableList list = null;
-    private int indent = 10;
-    private const int lengthSideSquare = 80;
-    private Texture abilityTexture;
-    private Abilities abilities = null;
-    private MainUIHandler mainUIHandler;
+    private ReorderableList _list = null;
+    private int _indent = 10;
+    private const int _lengthSideSquare = 80;
+    private Texture _abilityTexture;
+    private Abilities _abilities = null;
+    private MainUIHandler _mainUIHandler;
     private void OnEnable()
     {
         if(SceneManager.GetActiveScene().name == "Shop")
         {
-            mainUIHandler = FindObjectOfType<MainUIHandler>();
-            abilities = ((Abilities)target);
-            list = new ReorderableList(serializedObject,serializedObject.FindProperty("abilities"),true,true,true,true);
-            list.drawElementCallback = DrawElementCallback;
-            list.elementHeightCallback = (index) => 
+            _mainUIHandler = FindObjectOfType<MainUIHandler>();
+            _abilities = ((Abilities)target);
+            _list = new ReorderableList(serializedObject,serializedObject.FindProperty("_abilities"),true,true,true,true);
+            _list.drawElementCallback = DrawElementCallback;
+            _list.elementHeightCallback = (index) => 
             {
-                return EditorGUIUtility.singleLineHeight * 4 + indent * 4;
+                return EditorGUIUtility.singleLineHeight * 4 + _indent * 4;
             };
-            list.drawHeaderCallback = (Rect rect) => {
+            _list.drawHeaderCallback = (Rect rect) => {
                 EditorGUI.LabelField(rect,"Abilities");
             };
-            list.onAddCallback = list =>
+            _list.onAddCallback = list =>
             {
-                mainUIHandler = FindObjectOfType<MainUIHandler>();
-                mainUIHandler.AddAbilityToList(list,abilities.prefabAbilityCell);
+                _mainUIHandler = FindObjectOfType<MainUIHandler>();
+                _mainUIHandler.AddAbilityToList(list,_abilities._prefabAbilityCell);
             };
-            list.onRemoveCallback = list => 
+            _list.onRemoveCallback = list => 
             {
-                mainUIHandler = FindObjectOfType<MainUIHandler>();
-                mainUIHandler.RemoveAbilityToList(list);
+                _mainUIHandler = FindObjectOfType<MainUIHandler>();
+                _mainUIHandler.RemoveAbilityToList(list);
             };
             }
         }
     private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
     {
-        var element = list.serializedProperty.GetArrayElementAtIndex(index);
+        var element = _list.serializedProperty.GetArrayElementAtIndex(index);
             if(index > 3)
             {
-            AbilityUIElements skinCharacteristicsUI = mainUIHandler.abilityUIElements[index - 4];
+            AbilityUIElements skinCharacteristicsUI = _mainUIHandler._abilityUIElements[index - 4];
             Debug.Log(index);
             EditorGUI.LabelField(new Rect(rect.x,rect.y,rect.width,EditorGUIUtility.singleLineHeight),new GUIContent(("Skin " + (index + 1))));
-            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight + 5,rect.width / 3 - indent,EditorGUIUtility.singleLineHeight),"Sprite ability");
+            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight + 5,rect.width / 3 - _indent,EditorGUIUtility.singleLineHeight),"Sprite ability");
             EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4, rect.y + EditorGUIUtility.singleLineHeight + 5, rect.width / 3, EditorGUIUtility.singleLineHeight),
-            element.FindPropertyRelative("spriteAbility"),GUIContent.none);
-            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight * 2 + indent,rect.width / 3 - indent,EditorGUIUtility.singleLineHeight),"price");
-            EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4,rect.y + EditorGUIUtility.singleLineHeight * 2 + indent,rect.width / 3,18),
-                element.FindPropertyRelative("price"),GUIContent.none);
+            element.FindPropertyRelative("_spriteAbility"),GUIContent.none);
+            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight * 2 + _indent,rect.width / 3 - _indent,EditorGUIUtility.singleLineHeight),"price");
+            EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4,rect.y + EditorGUIUtility.singleLineHeight * 2 + _indent,rect.width / 3,18),
+                element.FindPropertyRelative("_price"),GUIContent.none);
 
                 EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight * 4,39,18),"ability");
                 EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4,rect.y + EditorGUIUtility.singleLineHeight * 4,rect.width / 3,18),
-                element.FindPropertyRelative("abilityType"),GUIContent.none);
+                element.FindPropertyRelative("_abilityType"),GUIContent.none);
             UpdateSkinCharacteristicsUI(element,skinCharacteristicsUI);
             }
             else
             {
             EditorGUI.LabelField(new Rect(rect.x,rect.y,rect.width,EditorGUIUtility.singleLineHeight),new GUIContent(("Skin " + (index + 1))));
-            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight + 5,rect.width / 3 - indent,EditorGUIUtility.singleLineHeight),"Sprite ability");
+            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight + 5,rect.width / 3 - _indent,EditorGUIUtility.singleLineHeight),"Sprite ability");
             EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4, rect.y + EditorGUIUtility.singleLineHeight + 5, rect.width / 3, EditorGUIUtility.singleLineHeight),
-            element.FindPropertyRelative("spriteAbility"),GUIContent.none);
-            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight * 2 + indent,rect.width / 3 - indent,EditorGUIUtility.singleLineHeight),"price");
-            EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4,rect.y + EditorGUIUtility.singleLineHeight * 2 + indent,rect.width / 3,18),
-                element.FindPropertyRelative("price"),GUIContent.none);
+            element.FindPropertyRelative("_spriteAbility"),GUIContent.none);
+            EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight * 2 + _indent,rect.width / 3 - _indent,EditorGUIUtility.singleLineHeight),"price");
+            EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4,rect.y + EditorGUIUtility.singleLineHeight * 2 + _indent,rect.width / 3,18),
+                element.FindPropertyRelative("_price"),GUIContent.none);
 
                 EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 2.5f,rect.y + EditorGUIUtility.singleLineHeight * 4,39,18),"ability");
                 EditorGUI.PropertyField(new Rect(rect.x + rect.width / 6 * 4,rect.y + EditorGUIUtility.singleLineHeight * 4,rect.width / 3,18),
-                element.FindPropertyRelative("abilityType"),GUIContent.none);
+                element.FindPropertyRelative("_abilityType"),GUIContent.none);
             }
-            abilityTexture = null;
-            if(element?.FindPropertyRelative("spriteAbility").objectReferenceValue != null)
+            _abilityTexture = null;
+            if(element?.FindPropertyRelative("_spriteAbility").objectReferenceValue != null)
             {
-                abilityTexture = ((Sprite)element?.FindPropertyRelative("spriteAbility").objectReferenceValue).texture;
+                _abilityTexture = ((Sprite)element?.FindPropertyRelative("_spriteAbility").objectReferenceValue).texture;
             }
-                Rect upperRect = new Rect(rect.x,rect.y + EditorGUIUtility.singleLineHeight + 5,lengthSideSquare,lengthSideSquare);
-                if(abilityTexture != null)
+                Rect upperRect = new Rect(rect.x,rect.y + EditorGUIUtility.singleLineHeight + 5,_lengthSideSquare,_lengthSideSquare);
+                if(_abilityTexture != null)
                 {
-                    GUI.DrawTexture(upperRect,abilityTexture);
+                    GUI.DrawTexture(upperRect,_abilityTexture);
                 }
     }
     public override void OnInspectorGUI()
     {
         if(GUILayout.Button("Serialize"))
         {
-            GameManager.SerializeClassAbility(((Abilities)serializedObject.targetObject).abilities);
+            GameManager.SerializeClassAbility(((Abilities)serializedObject.targetObject)._abilities);
         }
         if(SceneManager.GetActiveScene().buildIndex == 2)
         {
-        abilities.prefabAbilityCell = (GameObject) EditorGUILayout.ObjectField("Skin cell",(Object) abilities.prefabAbilityCell,typeof(GameObject),false);
+        _abilities._prefabAbilityCell = (GameObject) EditorGUILayout.ObjectField("Ability cell",(Object) _abilities._prefabAbilityCell,typeof(GameObject),false);
         serializedObject.Update();
-        list.DoLayoutList();
+        _list.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
         }
     }
     private void UpdateSkinCharacteristicsUI(SerializedProperty element,AbilityUIElements sh)
     {
-        if(element?.FindPropertyRelative("spriteAbility")?.objectReferenceValue != null)
+        if(element?.FindPropertyRelative("_spriteAbility")?.objectReferenceValue != null)
             {
-                sh.imageAbility.sprite = ((Sprite)element?.FindPropertyRelative("spriteAbility").objectReferenceValue);
+                sh._imageAbility.sprite = ((Sprite)element?.FindPropertyRelative("_spriteAbility").objectReferenceValue);
             }
-        sh.priceText.text = element.FindPropertyRelative("price").intValue.ToString();
-    }
-    private string ReplacingTickADot(float number)
-    {
-        string valueString = number.ToString();
-        return valueString = valueString.Replace(",",".");
+        sh._priceText.text = element.FindPropertyRelative("_price").intValue.ToString();
     }
 }

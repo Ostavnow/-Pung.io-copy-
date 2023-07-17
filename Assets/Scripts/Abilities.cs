@@ -5,20 +5,20 @@ using UnityEngine;
 public class Abilities : MonoBehaviour
 {
     public delegate Closures AbilityDelegate(PlayerController playerController,bool isActtive);
-    public static AbilityDelegate[] abilitiesDelegate = new AbilityDelegate[33];
+    public static AbilityDelegate[] _abilitiesDelegate = new AbilityDelegate[33];
     [SerializeField]
-    public List<Ability> abilities = new List<Ability>();
+    public List<Ability> _abilities = new List<Ability>();
     public delegate float[] Closures();
-    public GameObject prefabAbilityCell;
+    public GameObject _prefabAbilityCell;
     void Awake()
     {
-        abilitiesDelegate[0] = Dush;
-        abilitiesDelegate[1] = PunchSwarm;
-        abilitiesDelegate[2] = LongPunch;
-        abilitiesDelegate[3] = Fourarms;
-        abilitiesDelegate[4] = BigPlayer;
-        abilitiesDelegate[5] = ExsperienceBoost;
-        abilitiesDelegate[6] = Shield;
+        _abilitiesDelegate[0] = Dush;
+        _abilitiesDelegate[1] = PunchSwarm;
+        _abilitiesDelegate[2] = LongPunch;
+        _abilitiesDelegate[3] = Fourarms;
+        _abilitiesDelegate[4] = BigPlayer;
+        _abilitiesDelegate[5] = ExsperienceBoost;
+        _abilitiesDelegate[6] = Shield;
     }
     //numdrs[0] = Time of action; numbers[1] = recovery Time;
     public static Closures Dush(PlayerController player,bool isActive)
@@ -100,13 +100,13 @@ public class Abilities : MonoBehaviour
             {
                 randomPosition = new Vector3(player.handRightPoint.position.x + randomValue.x,player.handRightPoint.position.y + randomValue.y,0);
                 isWillNextBlowBeRightSide = false;
-                player.HandCreate(randomPosition,360,ref isWillNextBlowBeRightSide);
+                player.HandCreate(randomPosition,ref isWillNextBlowBeRightSide);
             }
             else
             {
                 randomPosition = new Vector3(player.handLeftPoint.position.x + randomValue.x,player.handLeftPoint.position.y + randomValue.y,0);
                 isWillNextBlowBeRightSide = true;
-                player.HandCreate(randomPosition,360,ref isWillNextBlowBeRightSide);
+                player.HandCreate(randomPosition,ref isWillNextBlowBeRightSide);
             }
         }
         else
@@ -147,11 +147,11 @@ public class Abilities : MonoBehaviour
         {
             if(isActive)
             {
-                player.player.experienceImprovementMultiplier = 2f;
+                player.player._experienceImprovementMultiplier = 2f;
             }
             else
             {
-                player.player.experienceImprovementMultiplier = 1f;
+                player.player._experienceImprovementMultiplier = 1f;
             }
         return numbers;
         }
