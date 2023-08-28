@@ -1185,29 +1185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf37acc2da5b9c4ab0f906914b08c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _abilities:
-  - _spriteAbility: {fileID: 21300000, guid: 7a80c30fa263c9b479fcb45bc5005358, type: 3}
-    _price: 0
-    _abilityType: 0
-  - _spriteAbility: {fileID: 21300000, guid: 2438e13655e076e4499b2c79baac8f33, type: 3}
-    _price: 0
-    _abilityType: 1
-  - _spriteAbility: {fileID: 21300000, guid: 34fec6bcf63b72b40a8b9ed11656e76e, type: 3}
-    _price: 0
-    _abilityType: 3
-  - _spriteAbility: {fileID: 21300000, guid: 15da8d583939dfb4c9a5eface4a4feaa, type: 3}
-    _price: 0
-    _abilityType: 3
-  - _spriteAbility: {fileID: 21300000, guid: d6b5c0a1ce546d54a988722b2eed3f95, type: 3}
-    _price: 100
-    _abilityType: 4
-  - _spriteAbility: {fileID: 21300000, guid: 7a16e00525ca13144a18792a0d83b137, type: 3}
-    _price: 100
-    _abilityType: 5
-  - _spriteAbility: {fileID: 21300000, guid: d9b82c340c1943740830f18dc1fc8dd0, type: 3}
-    _price: 500
-    _abilityType: 6
-  _prefabAbilityCell: {fileID: 8968681115490173880, guid: f764d2fd43929474ca6538efa7d8869e, type: 3}
 --- !u!1 &176942173
 GameObject:
   m_ObjectHideFlags: 0
@@ -2012,7 +1989,6 @@ MonoBehaviour:
     _userName: 
     _email: 
     _password: 
-    _amountMoney: 0
     _purchasedSkins: 000000000100000002000000
     _purchasedAbilities: 00000000010000000200000003000000
     _seletedAbilities: 00000000010000000200000003000000
@@ -9785,62 +9761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1f6e415d1404b4287012ca41d04a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skins:
-  - _attackDamage: 1
-    _health: 3.1
-    _stamina: 1
-    _criticalDamage: 1
-    _attackSpeed: 1
-    _protection: 1
-    _price: 0
-    _spriteSkinBody: {fileID: 21300000, guid: 298dfba4743072c40a89960e639c3c81, type: 3}
-    _spriteSkinHand: {fileID: 21300000, guid: 2b091535a6e5c49468839c2fed697ff2, type: 3}
-  - _attackDamage: 1
-    _health: 3
-    _stamina: 1
-    _criticalDamage: 1
-    _attackSpeed: 1.1
-    _protection: 1
-    _price: 0
-    _spriteSkinBody: {fileID: 21300000, guid: 1f051b80d068c264a8dd760e6cd098ba, type: 3}
-    _spriteSkinHand: {fileID: 21300000, guid: c4018cc4525a93444aa413e4f9c73073, type: 3}
-  - _attackDamage: 1
-    _health: 3
-    _stamina: 1.1
-    _criticalDamage: 1
-    _attackSpeed: 1
-    _protection: 1
-    _price: 0
-    _spriteSkinBody: {fileID: 21300000, guid: 8c65158901f099447b97fd5f01ca1a3e, type: 3}
-    _spriteSkinHand: {fileID: 21300000, guid: 9ea822ae9ae309940b3aace79058605c, type: 3}
-  - _attackDamage: 1.2
-    _health: 3
-    _stamina: 1
-    _criticalDamage: 1
-    _attackSpeed: 1.2
-    _protection: 1
-    _price: 100
-    _spriteSkinBody: {fileID: 21300000, guid: d1e42475bf8969f4aa1e2f560275af81, type: 3}
-    _spriteSkinHand: {fileID: 21300000, guid: 3d62464154e7ff547b383587a6c6f615, type: 3}
-  - _attackDamage: 1.2
-    _health: 3
-    _stamina: 1.2
-    _criticalDamage: 1
-    _attackSpeed: 1
-    _protection: 1
-    _price: 100
-    _spriteSkinBody: {fileID: 21300000, guid: 89a9ae9aa3797374da53d45164264c79, type: 3}
-    _spriteSkinHand: {fileID: 21300000, guid: cd198874f32165b498da99a18fce29c8, type: 3}
-  - _attackDamage: 1.5
-    _health: 3
-    _stamina: 1.2
-    _criticalDamage: 1
-    _attackSpeed: 1.5
-    _protection: 1
-    _price: 500
-    _spriteSkinBody: {fileID: 21300000, guid: 3fca7e48bf7c87d4583f7c2b485884bd, type: 3}
-    _spriteSkinHand: {fileID: 21300000, guid: 2e4e46612f1e2e94a94ea92dd8d3db61, type: 3}
-  _prefabSkinCell: {fileID: 7397980530594641778, guid: 607033a2a4d080e4fa206379117db4f5, type: 3}
+  _listSkins: []
 --- !u!1 &1610013264
 GameObject:
   m_ObjectHideFlags: 0
@@ -10354,7 +10275,7 @@ GameObject:
   - component: {fileID: 1703813318}
   - component: {fileID: 1703813317}
   m_Layer: 5
-  m_Name: money counter
+  m_Name: coin balance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11546,8 +11467,8 @@ GameObject:
   - component: {fileID: 1887933202}
   - component: {fileID: 1887933201}
   m_Layer: 5
-  m_Name: Refund panel
-  m_TagString: Untagged
+  m_Name: refund panel
+  m_TagString: refund panel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11871,79 +11792,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed4f77be0180774ba99378bf55039bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skinUIElements:
-  - _attackDamageText: {fileID: 1807181739}
-    _healthText: {fileID: 312710278}
-    _staminaText: {fileID: 1453803244}
-    _criticalDamageText: {fileID: 1866576759}
-    _attackSpeedText: {fileID: 2041435876}
-    _protectionText: {fileID: 1517420855}
-    _priceText: {fileID: 769367823}
-    _skinBodyImage: {fileID: 505955649}
-    _skinRightHandImage: {fileID: 331447515}
-    _skinLeftHandImage: {fileID: 1870304293}
-  - _attackDamageText: {fileID: 376445435}
-    _healthText: {fileID: 1119187374}
-    _staminaText: {fileID: 1903562981}
-    _criticalDamageText: {fileID: 302740359}
-    _attackSpeedText: {fileID: 1993967063}
-    _protectionText: {fileID: 748142640}
-    _priceText: {fileID: 1171822088}
-    _skinBodyImage: {fileID: 1867726444}
-    _skinRightHandImage: {fileID: 1145370704}
-    _skinLeftHandImage: {fileID: 1849353496}
-  - _attackDamageText: {fileID: 632086155}
-    _healthText: {fileID: 1931284818}
-    _staminaText: {fileID: 561011334}
-    _criticalDamageText: {fileID: 1538417338}
-    _attackSpeedText: {fileID: 494434040}
-    _protectionText: {fileID: 486141259}
-    _priceText: {fileID: 1693091953}
-    _skinBodyImage: {fileID: 1686254418}
-    _skinRightHandImage: {fileID: 176942176}
-    _skinLeftHandImage: {fileID: 196365245}
-  _abilityUIElements:
-  - _imageAbility: {fileID: 1357235152}
-    _priceText: {fileID: 1970353067}
-  - _imageAbility: {fileID: 719092749}
-    _priceText: {fileID: 389180914}
-  - _imageAbility: {fileID: 1238287535}
-    _priceText: {fileID: 409987174}
-  _donateSlots: 000000001027000050c3000000000000400d030020a10700
-  _healthStripe: {fileID: 0}
-  _staminaStripe: {fileID: 0}
-  _XPStripe: {fileID: 0}
-  _firstAbilityImage: {fileID: 0}
-  _secondAbilityImage: {fileID: 0}
-  _thirdAbilityImage: {fileID: 0}
-  _fourthAbilityImage: {fileID: 0}
-  _textOfHealthStrip: {fileID: 0}
-  _textOfStaminaStrip: {fileID: 0}
-  _attackDamageText: {fileID: 0}
-  _healthText: {fileID: 0}
-  _staminaText: {fileID: 0}
-  _criticalDamageText: {fileID: 0}
-  _attackSpeedText: {fileID: 0}
-  _multiplierAttackDamageImprovementText: {fileID: 0}
-  _healthImprovementMultiplierText: {fileID: 0}
-  _staminaImprovementMultiplierText: {fileID: 0}
-  _criticalDamageImprovementMultiplierText: {fileID: 0}
-  _attackSpeedImprovementMultiplierText: {fileID: 0}
-  _numberImproventsText: {fileID: 0}
-  _levelText: {fileID: 0}
-  _comboText: {fileID: 0}
-  _moneyCounterTextMenu: {fileID: 0}
-  _moneyCounterTextGame: {fileID: 0}
-  _skilsPanel: {fileID: 0}
-  _comboGameObject: {fileID: 0}
-  _skinCell: {fileID: 5601093511664353611, guid: e4ffa19631a11de45bc813b6db45ff3b, type: 3}
-  _abilityCell: {fileID: 8968681115490173880, guid: f764d2fd43929474ca6538efa7d8869e, type: 3}
-  _background: {fileID: 0}
-  _canvasTransform: {fileID: 0}
-  _firstAbilitySelected: {fileID: 0}
-  _secondAbilitySelected: {fileID: 0}
-  _thirdAbilitySelected: {fileID: 0}
-  _fourthAbilitySelected: {fileID: 0}
 --- !u!1 &1903562978
 GameObject:
   m_ObjectHideFlags: 0
@@ -13228,6 +13076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit

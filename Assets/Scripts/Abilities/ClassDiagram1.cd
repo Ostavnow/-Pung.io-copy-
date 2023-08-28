@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Abilities">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Abilities.Closures" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Abilities\Abilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAAAAAAQAAEAAAAAAAAAAIgAAAAAAAASAACAAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Abilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="AbilitiesEnum" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAMgQAAEEBIAAkAAoAAiABCAAACUigQCCCAQABSA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Abilities.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

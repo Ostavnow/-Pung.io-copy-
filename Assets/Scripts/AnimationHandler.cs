@@ -7,8 +7,7 @@ public class AnimationHandler : MonoBehaviour
     private Animator _animator;
     void Update()
     {
-        MainUIHandler mainUIHandler = FindObjectOfType<MainUIHandler>();
-        _animator = mainUIHandler._comboGameObject.GetComponent<Animator>();
+        _animator = FindObjectOfType<Animator>();
     }
     public void ComboUIPlay()
     {

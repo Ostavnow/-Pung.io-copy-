@@ -11,6 +11,8 @@ TagManager:
   - punching bag
   - player canvas
   - Bot
+  - coin balance
+  - refund panel
   layers:
   - Default
   - TransparentFX

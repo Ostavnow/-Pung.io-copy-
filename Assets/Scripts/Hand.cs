@@ -21,15 +21,15 @@ public class Hand : MonoBehaviour
     private GameObject _coinPrefab;
     [SerializeField]
     private GameObject _textPrefab;
-    private MainUIHandler _mainUIHandler;
     public float _flightDistance = 2.5f;
-    private void Start() {
+    private Transform _canvasTransform;
+    private void Start()
+    {
         _initialPosition = transform.position;
-        _mainUIHandler = FindObjectOfType<MainUIHandler>();
+        _canvasTransform = GameObject.FindGameObjectWithTag("Canvas").transform;
     }
     void Update()
     {
-
         transform.position += transform.up * _speed * Time.deltaTime;
         if(_isRightHand)
         {
@@ -53,13 +53,13 @@ public class Hand : MonoBehaviour
             int randomValue = UnityEngine.Random.Range(0,100);
             if(randomRangeCriticalDamage <= 10)
             {
-                TMP_Text text = Instantiate(_textPrefab,transform.position,Quaternion.identity,_mainUIHandler._canvasTransform).GetComponent<TMP_Text>();
+                TMP_Text text = Instantiate(_textPrefab,transform.position,Quaternion.identity,_canvasTransform).GetComponent<TMP_Text>();
                 text.text = _damage.ToString();
                 text.color = new Color(1,1,0,1);
             }
             else
             {
-                Instantiate(_textPrefab,transform.position,Quaternion.identity,_mainUIHandler._canvasTransform).GetComponent<TMP_Text>().text = randomRangeDamage.ToString();
+                Instantiate(_textPrefab,transform.position,Quaternion.identity,_canvasTransform).GetComponent<TMP_Text>().text = randomRangeDamage.ToString();
             }
             if(randomValue < 1)
             {
