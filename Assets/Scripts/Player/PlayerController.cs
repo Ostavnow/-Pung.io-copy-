@@ -3,7 +3,7 @@ using UnityEngine;
 using UI;
 using System;
 using Random = UnityEngine.Random;
-
+using AbilitiesSystem;
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D _rb;
@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         User _user = FindObjectOfType<DataManager>()._user;
-        _firstAbility = typeof(AbilityDush); 
         _handRightPoint = transform.GetChild(0);
         _handLeftPoint = transform.GetChild(1);
         _circleCollider2D = GetComponent<CircleCollider2D>();

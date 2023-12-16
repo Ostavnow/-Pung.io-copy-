@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using AbilitiesSystem;
 [System.Serializable]
 public class User
 {

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UI;
 [RequireComponent(typeof(PlayerUIHundlerBot))]
-[RequireComponent(typeof(BotPlayerController))]
 public class BotPlayerController : PlayerController
 {
     private Vector3 _targetPoint;

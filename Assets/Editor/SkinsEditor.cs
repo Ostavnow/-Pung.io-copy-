@@ -11,7 +11,6 @@ using UI;
 [CustomEditor(typeof(Skins))]
 public class SkinsEditor : Editor
 {
-    private readonly List<SkinUIElements> _skinUIElements = new List<SkinUIElements>();
     private ReorderableList _list = null;
     private int _indent = 10;
     private const int lengthSideSquare = 80;
@@ -19,62 +18,56 @@ public class SkinsEditor : Editor
     private Texture _skinHandTexture;
     private Skins _skins = null;
     private SkinUI _skinUI;
-    private Transform _listSkins;
-    private GameObject _refundPanel;
+    private SkinsEditorData _skinsEditorData;
 
-    // disable the ability to delete GameObjects in Scene view
-    protected virtual void OnSceneGUI()
-    {
-        InterceptKeyboardDelete();
-    }
+    // // disable the ability to delete GameObjects in Scene view
+    // protected virtual void OnSceneGUI()
+    // {
+    //     InterceptKeyboardDelete();
+    // }
 
-    // disable the ability to delete GameObjects in Hierarchy view
-    protected virtual void OnHierarchyGUI(int instanceID, Rect selectionRect)
-    {
-        InterceptKeyboardDelete();
-    }
+    // // disable the ability to delete GameObjects in Hierarchy view
+    // protected virtual void OnHierarchyGUI(int instanceID, Rect selectionRect)
+    // {
+    //     InterceptKeyboardDelete();
+    // }
 
 
-    // intercept keyboard delete event
-    private void InterceptKeyboardDelete()
-    {
-        var e = Event.current;
-        if (e.keyCode == KeyCode.Delete)
-        {
-            //e.Use(); // warning
-            e.type = EventType.Used;
-        }
-    }
+    // // intercept keyboard delete event
+    // private void InterceptKeyboardDelete()
+    // {
+    //     var e = Event.current;
+    //     if (e.keyCode == KeyCode.Delete)
+    //     {
+    //         //e.Use(); // warning
+    //         e.type = EventType.Used;
+    //     }
+    // }
     private void OnEnable()
     {
-        if(SceneManager.GetActiveScene().name == "Shop")
+        // EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
+        _skins = (Skins)target;
+        _skinsEditorData = _skins.GetComponent<SkinsEditorData>();
+        _skinUI = _skins.GetComponent<SkinUI>();
+        _list = new ReorderableList(serializedObject, serializedObject.FindProperty("_listSkins"), true, true, true, true)
         {
-            EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
-            _refundPanel = GameObject.Find("Canvas").transform.GetChild(8).gameObject;
-            _skins = ((Skins)target);
-            _skinUI = _skins.GetComponent<SkinUI>();
-            _listSkins = _skins.transform;
-            _list = new ReorderableList(serializedObject, serializedObject.FindProperty("_skins"), true, true, true, true)
-            {
-                drawElementCallback = DrawElementCallback,
-                elementHeightCallback = (index) => EditorGUIUtility.singleLineHeight * 8 + _indent * 4,
-                drawHeaderCallback = (Rect rect) => EditorGUI.LabelField(rect, "Skins"),
-                onAddCallback = list => AddSkinsToList(list, _skins._prefabSkinCell),
-                onRemoveCallback = list => RemoveSkinToList(list)
-            };
-        }
-        }
-    protected virtual void OnDisable()
-    {
-        EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
+            drawElementCallback = DrawElementCallback,
+            elementHeightCallback = (index) => EditorGUIUtility.singleLineHeight * 8 + _indent * 4,
+            drawHeaderCallback = (Rect rect) => EditorGUI.LabelField(rect, "Skins"),
+            onAddCallback = list => AddSkinsToList(list, _skinsEditorData._prefabSkinCell),
+            onRemoveCallback = list => RemoveSkinToList(list)
+        };
     }
+    // protected virtual void OnDisable()
+    // {
+    //     EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
+    // }
     private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
     {
         var element = _list.serializedProperty.GetArrayElementAtIndex(index);
-            if(index < 3)
+            if(index > 2)
             {
-            SkinUIElements skinUIElement = _skinUIElements[index - 3];
-            Debug.Log(index);
+            SkinUIElements skinUIElement = _skinsEditorData._skinUIElements[index - 3];
             EditorGUI.LabelField(new Rect(rect.x,rect.y,rect.width,EditorGUIUtility.singleLineHeight),new GUIContent(("Skin " + (index + 1))));
             // // The value of character characteristics
             EditorGUI.LabelField(new Rect(rect.x + rect.width / 6 * 3,rect.y + EditorGUIUtility.singleLineHeight + 5,rect.width / 6 - _indent,EditorGUIUtility.singleLineHeight),"ATK");
@@ -170,15 +163,14 @@ public class SkinsEditor : Editor
     }
     public void AddSkinsToList(ReorderableList skins,GameObject prefabSkinCell)
     {
-        int index = skins.serializedProperty.arraySize;
         skins.serializedProperty.arraySize++;
-        index = skins.serializedProperty.arraySize;
+        int index = skins.serializedProperty.arraySize;
         skins.index = index;
         if(index > 3)
         {
         if(GameObject.Find("Canvas/skins panel/Background/Scroll Area/Skins/Skin " + index) == null)
         {
-            GameObject currentSkinCell = Instantiate(prefabSkinCell,Vector3.zero,Quaternion.identity,_listSkins);
+            GameObject currentSkinCell = Instantiate(prefabSkinCell,Vector3.zero,Quaternion.identity,_skinsEditorData._listSkinsTransform);
             Button buyButton = currentSkinCell.transform.GetChild(2).GetComponent<Button>();
             UnityAction<int> actionBuyButton = new UnityAction<int>(_skinUI.BuySkin);
             UnityEventTools.AddIntPersistentListener(buyButton.onClick,actionBuyButton,(index - 1));
@@ -190,27 +182,27 @@ public class SkinsEditor : Editor
             currentSkinCell.name = "Skin " + (index);
         }       
                 SkinUIElements skinUIElement = new SkinUIElements(
-                    _listSkins.GetChild(index - 4).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(0).GetChild(3).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(0).GetChild(4).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(0).GetChild(5).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
-                    _listSkins.GetChild(index - 4).GetChild(1).GetComponent<Image>(),
-                    _listSkins.GetChild(index - 4).GetChild(1).GetChild(1).GetComponent<Image>(),
-                    _listSkins.GetChild(index - 4).GetChild(1).GetChild(0).GetComponent<Image>());
-                _skinUIElements.Add(skinUIElement);
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(0).GetChild(1).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(0).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(0).GetChild(3).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(0).GetChild(4).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(0).GetChild(5).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(2).GetChild(0).GetComponent<TMP_Text>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(1).GetComponent<Image>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(1).GetChild(1).GetComponent<Image>(),
+                    _skinsEditorData._listSkinsTransform.GetChild(index - 4).GetChild(1).GetChild(0).GetComponent<Image>());
+                _skinsEditorData._skinUIElements.Add(skinUIElement);
         }
     }
     public void RemoveSkinToList(ReorderableList skins)
     {
         if(GameObject.Find("Canvas/skins panel/Background/Scroll Area/Skins/Skin " + skins.serializedProperty.arraySize) != null)
         {
-            DestroyImmediate(_listSkins.GetChild(skins.serializedProperty.arraySize - 4).gameObject);
+            DestroyImmediate(_skinsEditorData._listSkinsTransform.GetChild(skins.serializedProperty.arraySize - 4).gameObject);
         }
         skins.serializedProperty.arraySize--;
-        _skinUIElements.RemoveAt(_skinUIElements.Count - 1);
+        _skinsEditorData._skinUIElements.RemoveAt(_skinsEditorData._skinUIElements.Count - 1);
     }
     public override void OnInspectorGUI()
     {
@@ -218,13 +210,12 @@ public class SkinsEditor : Editor
         {
             DataManager.SerializeClassSkins(((Skins)serializedObject.targetObject)._listSkins);
         }
-        if(SceneManager.GetActiveScene().buildIndex == 2)
-        {
-        _skins._prefabSkinCell = (GameObject) EditorGUILayout.ObjectField("Skin cell",(Object) _skins._prefabSkinCell,typeof(GameObject),false);
+
+        _skinsEditorData._listSkinsTransform = (Transform) EditorGUILayout.ObjectField("list skins",(Object) _skinsEditorData._listSkinsTransform,typeof(Transform),true);
+        _skinsEditorData._prefabSkinCell = (GameObject) EditorGUILayout.ObjectField("Skin cell",(Object) _skinsEditorData._prefabSkinCell,typeof(GameObject),false);
         serializedObject.Update();
         _list.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
-        }
     }
     private void UpdateSkinCharacteristicsUI(SerializedProperty element,SkinUIElements sh)
     {
@@ -249,44 +240,4 @@ public class SkinsEditor : Editor
         string valueString = number.ToString();
         return valueString = valueString.Replace(",",".");
     }
-}
-public struct SkinUIElements
-{
-        [SerializeField]
-        public TMP_Text _attackDamageText;
-        [SerializeField]
-        public TMP_Text _healthText;
-        [SerializeField]
-        public TMP_Text _staminaText;
-        [SerializeField]
-        public TMP_Text _criticalDamageText;
-        [SerializeField]
-        public TMP_Text _attackSpeedText;
-        [SerializeField]
-        public TMP_Text _protectionText;
-        [SerializeField]
-        public TMP_Text _priceText;
-        [SerializeField]
-        public Image _skinBodyImage;
-        [SerializeField]
-        public Image _skinRightHandImage;
-        [SerializeField]
-        public Image _skinLeftHandImage;
-        public SkinUIElements(TMP_Text attackDamageText,TMP_Text healthText,
-                              TMP_Text staminaText,TMP_Text criticalDamageText,
-                              TMP_Text attackSpeedText,TMP_Text protectionText,
-                              TMP_Text priceText,Image skinBodyImage,
-                              Image skinRightHandImage,Image skinLeftHandImage)
-                            {
-                                _attackDamageText = attackDamageText;
-                                _healthText = healthText;
-                                _staminaText = staminaText;
-                                _criticalDamageText = criticalDamageText;
-                                _attackSpeedText = attackSpeedText;
-                                _protectionText = protectionText;
-                                _priceText = priceText;
-                                _skinBodyImage = skinBodyImage;
-                                _skinRightHandImage = skinRightHandImage;
-                                _skinLeftHandImage = skinLeftHandImage;
-                            }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using AbilitiesSystem;
 public class DataManager : MonoBehaviour , ISaveProgress
 {
     public User _user;
@@ -105,7 +106,7 @@ public class DataManager : MonoBehaviour , ISaveProgress
     }
     public Skin DeserializeSkin(int id)
     {
-        string data = Resources.Load<TextAsset>("Text/skins").text;
+        string data = Resources.Load<TextAsset>("skins").text;
         string[] d = data.Split("\n",9);
         Skin skin = JsonUtility.FromJson<Skin>(d[id]);
         skin._spriteSkinBody = Resources.Load<Sprite>("Sprites/Skins/body " + (id + 1) + " skin");
@@ -114,7 +115,7 @@ public class DataManager : MonoBehaviour , ISaveProgress
     }
     public Ability DeserializeAbility(int id)
     {
-        string data = Resources.Load<TextAsset>("Text/abilities").text;
+        string data = Resources.Load<TextAsset>("abilities").text;
         string[] d = data.Split("\n",9);
         Ability ability = JsonUtility.FromJson<Ability>(d[id]);
         ability._spriteAbility = Resources.Load<Sprite>("Sprites/Abilities/ability icon " + (id + 1));

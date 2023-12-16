@@ -34,14 +34,14 @@ namespace UI
             _refundButton = transform.GetChild(4).gameObject;
             _refundPriceText = transform.GetChild(4).GetChild(0).GetComponent<TMP_Text>();    
         }
-        public void PurchasedSkin()
+        private void PurchasedSkin()
         {
             _buyButton.SetActive(false);
             _checkMark.SetActive(true);
             _refundButton.SetActive(true);
             _refundPriceText.text = (_skins._listSkins[id]._price / 2).ToString();
         }
-        public void NotPurchasedSkin()
+        private void NotPurchasedSkin()
         {
             _buyButton.SetActive(true);
             _checkMark.SetActive(false);
