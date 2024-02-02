@@ -8,6 +8,10 @@ using UnityEngine.Events;
 using UnityEditor.Events;
 using UI;
 using AbilitiesSystem;
+using System.Reflection;
+using System;
+using System.Linq;
+using Codice.Client.Common.GameUI;
 [CustomEditor(typeof(Abilities))]
 public class AbilityEditor : Editor
 {
@@ -33,8 +37,8 @@ public class AbilityEditor : Editor
                 onAddCallback = list => AddAbilityToList(list, _abilityEditorData._prefabAbilityCell),
                 onRemoveCallback = list => RemoveAbilityToList(list)
             };
-            InitializedAbilityUIElementsArray();
-        }
+            UpdateAbilityList(_list);
+    }
     private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
     {
         var element = _list.serializedProperty.GetArrayElementAtIndex(index);
@@ -85,7 +89,7 @@ public class AbilityEditor : Editor
         {
             DataManager.SerializeClassAbility(((Abilities)serializedObject.targetObject)._listAbilities);
         }
-        _abilityEditorData._listAbilitiesTransform = (Transform) EditorGUILayout.ObjectField("list abilities",(Object) _abilityEditorData._listAbilitiesTransform,typeof(Transform),true);
+        // _abilityEditorData._listAbilitiesTransform = (Transform) EditorGUILayout.ObjectField("list abilities",(Object) _abilityEditorData._listAbilitiesTransform,typeof(Transform),true);
         _abilityEditorData._prefabAbilityCell = (GameObject) EditorGUILayout.ObjectField("Ability cell", _abilityEditorData._prefabAbilityCell, typeof(GameObject),false);
         serializedObject.Update();
         _list.DoLayoutList();
@@ -131,14 +135,90 @@ public class AbilityEditor : Editor
             }
         sh._priceText.text = element.FindPropertyRelative("_price").intValue.ToString();
     }
-    private void InitializedAbilityUIElementsArray()
+    private List<Ability> FindingAbilityClasses()
     {
-        for(int index = 4; index < _list.serializedProperty.arraySize; index++)
+        List<Ability> _listAbilities = new List<Ability>();
+        List<Type> classes = Assembly.GetAssembly(typeof(Abilities)).GetTypes().ToList<Type>();
+        foreach (Type clas in classes)
         {
-            AbilityUIElements abilityUIElement = new AbilityUIElements(
-                    _abilityEditorData._listAbilitiesTransform.GetChild(index - 4).GetChild(0).GetComponent<Image>(),
-                    _abilityEditorData._listAbilitiesTransform.GetChild(index - 4).GetChild(1).GetChild(0).GetComponent<TMP_Text>());
-                _abilityEditorData._abilityUIElements.Add(abilityUIElement);
+            if(clas.BaseType == typeof(Ability))
+            {
+                object ability = Activator.CreateInstance(clas);
+                _listAbilities.Add((Ability)ability);
+            }
         }
+        return _listAbilities;
+    }
+    private void UpdateAbilityList(ReorderableList changeableListOfAbilities)
+    {
+        List<Ability> newListAbility = FindingAbilityClasses();
+        Debug.Log(newListAbility.Count);
+        Debug.Log(changeableListOfAbilities.serializedProperty.arraySize);
+        if(changeableListOfAbilities.serializedProperty.arraySize == 0)
+        {
+            Abilities abilities = new Abilities();
+            new SerializedObject(abilities).CopyFromSerializedProperty(changeableListOfAbilities.serializedProperty);
+        }
+        // for(int i = 0;i < newListAbility.Count;i++)
+        // {
+        //     for(int a = 0; a < changeableListOfAbilities.Count;a++)
+        //     {
+        //         if(changeableListOfAbilities[a].Equals(newListAbility[i]))
+        //         {
+        //             break;
+        //         }
+        //         else if(a + 1 == changeableListOfAbilities.Count)
+        //         {
+        //             changeableListOfAbilities.Add(newListAbility[i]);
+        //         }
+        //     }
+        // }
+        SerializedProperty sp = changeableListOfAbilities.serializedProperty; // копировать, чтобы мы не перечислили оригинал
+        if(sp.isArray) {
+            int arrayLength = 0;
+            sp.Next(true); // skip generic field
+            sp.Next(true); // advance to array size field
+            // Get the array size
+            arrayLength = sp.intValue;
+
+            sp.Next(true); // advance to first array index
+
+            // Write values to list
+            List<Ability> values = new List<Ability>(arrayLength);
+            int lastIndex = arrayLength - 1;
+            for(int currentListItem = 0;currentListItem < arrayLength;currentListItem++) {
+                if(newListAbility.IndexOf((Ability)sp.managedReferenceValue)  == -1)
+                {
+                changeableListOfAbilities.serializedProperty.arraySize++;
+                GoToLastElementArray();
+                sp.managedReferenceValue = newListAbility[currentListItem];
+                sp.Reset();
+                currentListItem = 0;
+                }
+                if(currentListItem < lastIndex)
+                {
+                    sp.Next(false); // advance without drilling into children  
+                }
+                
+            }
+// Объект, назначенный полю с атрибутом serializereference.
+            // iterate over the list displaying the contents
+            for(int i = 0; i < values.Count; i++) {
+                EditorGUILayout.LabelField(i + " = " + values);
+            }
+            void GoToLastElementArray()
+            {
+            sp.Reset();
+            for(int i = 0; i < 3; i++)
+            {
+                sp.Next(true);
+            }
+            for(int i = 0; i < lastIndex;i++)
+            {
+                sp.Next(false);
+            }
+            }
+        }
+        
     }
 }

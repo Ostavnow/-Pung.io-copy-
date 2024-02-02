@@ -18,7 +18,7 @@ namespace AbilitiesSystem
             _monoBehaviour = monoBehaviour;
             Initialize();
         }
-        protected Ability ()
+        public Ability ()
         {
             Initialize();
         }
@@ -30,6 +30,16 @@ namespace AbilitiesSystem
         protected virtual IEnumerator AbilityCorutine()
         {
             return null;
+        }
+        public override bool Equals(object obj)
+        {
+            if(this.GetType().Name == obj.GetType().Name)
+            {
+                Debug.Log("Класс " + this.GetType().Name + " равен с сравниваемым классом" + obj.GetType().Name);
+                return true;
+            }
+            Debug.Log("Класс " + this.GetType().Name + " неравен с равниваемым классом" + obj.GetType().Name);
+            return false;
         }
     }
 }

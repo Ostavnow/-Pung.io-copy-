@@ -244,7 +244,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: BackLoginButton
         m_Mode: 1
@@ -340,7 +340,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: LoginUser
         m_Mode: 1
@@ -2905,7 +2905,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 408335804}
   m_HandleRect: {fileID: 557721959}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4289,7 +4289,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: BackRegisterButton
         m_Mode: 1
@@ -4919,7 +4919,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 772487480}
-  - component: {fileID: 772487479}
   - component: {fileID: 772487481}
   m_Layer: 0
   m_Name: MainUIHandler
@@ -4928,55 +4927,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &772487479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772487478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aed4f77be0180774ba99378bf55039bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skinUIElements: []
-  _abilityUIElements: []
-  _donateSlots: 000000001027000050c3000000000000400d030020a10700
-  _healthStripe: {fileID: 0}
-  _staminaStripe: {fileID: 0}
-  _XPStripe: {fileID: 0}
-  _firstAbilityImage: {fileID: 0}
-  _secondAbilityImage: {fileID: 0}
-  _thirdAbilityImage: {fileID: 0}
-  _fourthAbilityImage: {fileID: 0}
-  _textOfHealthStrip: {fileID: 0}
-  _textOfStaminaStrip: {fileID: 0}
-  _attackDamageText: {fileID: 0}
-  _healthText: {fileID: 0}
-  _staminaText: {fileID: 0}
-  _criticalDamageText: {fileID: 0}
-  _attackSpeedText: {fileID: 0}
-  _multiplierAttackDamageImprovementText: {fileID: 0}
-  _healthImprovementMultiplierText: {fileID: 0}
-  _staminaImprovementMultiplierText: {fileID: 0}
-  _criticalDamageImprovementMultiplierText: {fileID: 0}
-  _attackSpeedImprovementMultiplierText: {fileID: 0}
-  _numberImproventsText: {fileID: 0}
-  _levelText: {fileID: 0}
-  _comboText: {fileID: 0}
-  _moneyCounterTextMenu: {fileID: 0}
-  _moneyCounterTextGame: {fileID: 0}
-  _skilsPanel: {fileID: 0}
-  _comboGameObject: {fileID: 0}
-  _skinCell: {fileID: 5601093511664353611, guid: e4ffa19631a11de45bc813b6db45ff3b, type: 3}
-  _abilityCell: {fileID: 8968681115490173880, guid: f764d2fd43929474ca6538efa7d8869e, type: 3}
-  _background: {fileID: 0}
-  _canvasTransform: {fileID: 0}
-  _firstAbilitySelected: {fileID: 0}
-  _secondAbilitySelected: {fileID: 0}
-  _thirdAbilitySelected: {fileID: 0}
-  _fourthAbilitySelected: {fileID: 0}
 --- !u!4 &772487480
 Transform:
   m_ObjectHideFlags: 0
@@ -5001,11 +4951,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 772487478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bf37acc2da5b9c4ab0f906914b08c3f, type: 3}
+  m_Script: {fileID: 11500000, guid: d839dd9190408024f8140f04627613dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _abilities: []
-  _prefabAbilityCell: {fileID: 0}
+  _listAbilitiesTransform: {fileID: 0}
+  _refundPanel: {fileID: 0}
 --- !u!1 &779218557
 GameObject:
   m_ObjectHideFlags: 0
@@ -5837,7 +5787,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: LoginButton
         m_Mode: 1
@@ -8682,7 +8632,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: RegisterButton
         m_Mode: 1
@@ -9164,7 +9114,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: RegisterUser
         m_Mode: 1
@@ -9633,21 +9583,10 @@ MonoBehaviour:
     _userName: 
     _email: 
     _password: 
-    _amountMoney: 0
     _purchasedSkins: 000000000100000002000000
     _purchasedAbilities: 00000000010000000200000003000000
     _seletedAbilities: 00000000010000000200000003000000
     _numberSelectedSkin: 0
-  _skin:
-    _attackDamage: 1
-    _health: 1
-    _stamina: 1
-    _criticalDamage: 1
-    _attackSpeed: 1
-    _protection: 1
-    _price: 100
-    _spriteSkinBody: {fileID: 0}
-    _spriteSkinHand: {fileID: 0}
 --- !u!4 &1540498606
 Transform:
   m_ObjectHideFlags: 0
@@ -11091,7 +11030,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772487479}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainUIHandler, Assembly-CSharp
         m_MethodName: LogoutButton
         m_Mode: 1

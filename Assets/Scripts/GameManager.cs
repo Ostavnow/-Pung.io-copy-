@@ -5,8 +5,6 @@ public sealed class GameManager : MonoBehaviour
 {
     public User _user;
     public static GameManager _instance;
-    public Skin _skin;
-    private Abilities _abilities;
     private static string Path
     {
         get{return Application.persistentDataPath + "/saveFile.json";}

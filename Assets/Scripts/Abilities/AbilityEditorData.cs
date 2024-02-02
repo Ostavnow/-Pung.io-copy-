@@ -6,7 +6,6 @@ namespace AbilitiesSystem
 {
     public class AbilityEditorData : MonoBehaviour
     {
-        [HideInInspector]
         [SerializeField] public List<AbilityUIElements> _abilityUIElements = new List<AbilityUIElements>();
         [HideInInspector]
         public Transform _listAbilitiesTransform;

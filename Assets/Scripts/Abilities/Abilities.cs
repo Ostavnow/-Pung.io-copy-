@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UI;
+using System;
+using System.Linq;
 namespace AbilitiesSystem
 {
     [RequireComponent(typeof(AbilityUI))]
     [RequireComponent(typeof(AbilityEditorData))]
-    [System.Serializable]
+    // [Serializable]
     public class Abilities : MonoBehaviour
     {
+        
         [SerializeField]
         public List<Ability> _listAbilities = new List<Ability>();
-        private void OnEnable()
-        {
-
-        }
     }
     public enum AbilitiesEnum
     {

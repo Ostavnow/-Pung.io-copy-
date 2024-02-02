@@ -28,9 +28,9 @@ public class AbilitiesSelectebleUI : MonoBehaviour
             GameObject abilityCellCurrent = Instantiate(_prefabAbilityCell,transform.position,Quaternion.identity,_listAbilities);
             Ability ability = _dataManager.DeserializeAbility(_user._purchasedAbilities[i]);
             Image abilityImage = abilityCellCurrent.transform.GetChild(0).GetComponent<Image>();
-            abilityCellCurrent.GetComponent<AbilitySelectUI>()._abilityEnum = ability._abilityType;
+            // abilityCellCurrent.GetComponent<AbilitySelectUI>()._abilityEnum = ability._abilityType;
             abilityImage.sprite = ability._spriteAbility;
-            abilityCellCurrent.GetComponent<AbilitySelectUI>()._abilityEnum = ability._abilityType;
+            // abilityCellCurrent.GetComponent<AbilitySelectUI>()._abilityEnum = ability._abilityType;
             }
             
         }
@@ -39,7 +39,7 @@ public class AbilitiesSelectebleUI : MonoBehaviour
             Ability ability = _dataManager.DeserializeAbility((int)_user._seletedAbilities[i]);
             Transform abilityUI = _listSelectedAbilities.GetChild(i);
             abilityUI.GetChild(0).GetComponent<Image>().sprite = ability._spriteAbility;
-            abilityUI.GetComponent<AbilitySelectUI>()._abilityEnum = ability._abilityType;
+            // abilityUI.GetComponent<AbilitySelectUI>()._abilityEnum = ability._abilityType;
             abilityUI.GetComponent<AbilitySelectUI>()._numberSelectedAbility = i;
         }
     }
