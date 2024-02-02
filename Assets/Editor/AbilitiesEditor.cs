@@ -159,20 +159,6 @@ public class AbilityEditor : Editor
             Abilities abilities = new Abilities();
             new SerializedObject(abilities).CopyFromSerializedProperty(changeableListOfAbilities.serializedProperty);
         }
-        // for(int i = 0;i < newListAbility.Count;i++)
-        // {
-        //     for(int a = 0; a < changeableListOfAbilities.Count;a++)
-        //     {
-        //         if(changeableListOfAbilities[a].Equals(newListAbility[i]))
-        //         {
-        //             break;
-        //         }
-        //         else if(a + 1 == changeableListOfAbilities.Count)
-        //         {
-        //             changeableListOfAbilities.Add(newListAbility[i]);
-        //         }
-        //     }
-        // }
         SerializedProperty sp = changeableListOfAbilities.serializedProperty; // копировать, чтобы мы не перечислили оригинал
         if(sp.isArray) {
             int arrayLength = 0;
