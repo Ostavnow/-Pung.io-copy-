@@ -151,12 +151,14 @@ public class AbilityEditor : Editor
     }
     private void UpdateAbilityList(ReorderableList changeableListOfAbilities)
     {
+        gradingStudents(new List<int>(){4,73,67,38,33});
         List<Ability> newListAbility = FindingAbilityClasses();
         Debug.Log(newListAbility.Count);
         Debug.Log(changeableListOfAbilities.serializedProperty.arraySize);
         if(changeableListOfAbilities.serializedProperty.arraySize == 0)
         {
             Abilities abilities = new Abilities();
+            abilities._listAbilities = newListAbility;
             new SerializedObject(abilities).CopyFromSerializedProperty(changeableListOfAbilities.serializedProperty);
         }
         SerializedProperty sp = changeableListOfAbilities.serializedProperty; // копировать, чтобы мы не перечислили оригинал
@@ -179,6 +181,7 @@ public class AbilityEditor : Editor
                 GoToLastElementArray();
                 sp.managedReferenceValue = newListAbility[currentListItem];
                 sp.Reset();
+                GoToArray();
                 currentListItem = 0;
                 }
                 if(currentListItem < lastIndex)
@@ -194,17 +197,43 @@ public class AbilityEditor : Editor
             }
             void GoToLastElementArray()
             {
-            sp.Reset();
-            for(int i = 0; i < 3; i++)
-            {
-                sp.Next(true);
+                GoToArray();
+                for(int i = 0; i < lastIndex;i++)
+                {
+                    sp.Next(false);
+                }
             }
-            for(int i = 0; i < lastIndex;i++)
+            void GoToArray()
             {
-                sp.Next(false);
-            }
+                sp.Reset();
+                for(int i = 0; i < 3; i++)
+                {
+                    sp.Next(true);
+                }
             }
         }
-        
+    }
+    public static List<int> gradingStudents(List<int> grades)
+    {
+        List<int> finalGrades = new List<int>(grades[0]);
+        for(int i = 0; i < finalGrades.Count; i++)
+        {
+            if(grades[i] < 40)
+            {
+                finalGrades[i] = grades[i+1];
+                continue;
+            }
+            if(grades[i] % 5 < 3)
+            {
+                finalGrades[i] = grades[i+1];
+                finalGrades[i] += 5 - grades[i+1] % 5;
+            }
+            else finalGrades[i] = grades[i+1];
+        }
+        foreach(int grade in finalGrades)
+        {
+            Debug.Log(grade);
+        }
+        return finalGrades;
     }
 }

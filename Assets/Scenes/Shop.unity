@@ -569,7 +569,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf37acc2da5b9c4ab0f906914b08c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _listAbilities: []
+  _listAbilities:
+  - _spriteAbility: {fileID: 0}
+    _price: 0
+    _abilityType: 0
+    _timeOfAction: 0
+    _recoveryTime: 0
 --- !u!114 &165503445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6935,7 +6940,7 @@ MonoBehaviour:
     _criticalDamage: 1
     _attackSpeed: 1.2
     _protection: 1
-    _price: 100
+    _price: 500
     _spriteSkinBody: {fileID: 21300000, guid: 48c8d71ec9ee5634b93bc0f80367e8f5, type: 3}
     _spriteSkinHand: {fileID: 21300000, guid: 3d62464154e7ff547b383587a6c6f615, type: 3}
   - _attackDamage: 1.2
@@ -8392,7 +8397,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 500
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7a4115c16c52994298f029a14a55bd1, type: 2}
   m_sharedMaterial: {fileID: 6695125776238255976, guid: c7a4115c16c52994298f029a14a55bd1, type: 2}
